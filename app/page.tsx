@@ -154,7 +154,7 @@ const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }) => 
 );
 
 export default function DiscordBotLanding() {
-  const [activeFeature, setActiveFeature] = useState(null);
+  const [activeFeature, setActiveFeature] = useState<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
