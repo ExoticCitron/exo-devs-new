@@ -152,7 +152,7 @@ const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }) => 
 
 const PremiumPage: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [activeFeature, setActiveFeature] = useState(null);
+  const [activeFeature, setActiveFeature] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [loading, setLoading] = useState(true);
