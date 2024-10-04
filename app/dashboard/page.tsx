@@ -11,13 +11,13 @@ const FeatureIcon = ({ icon: Icon, delay }) => (
     animate={{ scale: 1, rotate: 0 }}
     transition={{ delay, type: 'spring', stiffness: 260, damping: 20 }}
   >
-    <Icon className="w-8 h-8 text-gray-300" />
+    <Icon className="w-8 h-8 text-blue-300" />
   </motion.div>
 );
 
 const BackgroundBubble = ({ size, position, color }) => (
   <motion.div
-    className={`absolute rounded-full ${color} opacity-20 blur-xl`}
+    className={`absolute rounded-full ${color} opacity-10 blur-xl`}
     style={{
       width: size,
       height: size,
@@ -41,7 +41,7 @@ const SparkleEffect = () => (
     {[...Array(50)].map((_, i) => (
       <motion.div
         key={i}
-        className="absolute w-1 h-1 bg-white rounded-full"
+        className="absolute w-1 h-1 bg-blue-300 rounded-full"
         initial={{
           opacity: 0,
           x: "50%",
@@ -79,7 +79,7 @@ const LoadingPage = ({ progress, onComplete }) => {
   useEffect(() => {
     const textInterval = setInterval(() => {
       setTextIndex((prevIndex) => (prevIndex + 1) % coolTextOptions.length);
-    }, 2000); // Change text every 2 seconds
+    }, 2000);
 
     return () => clearInterval(textInterval);
   }, []);
@@ -90,14 +90,14 @@ const LoadingPage = ({ progress, onComplete }) => {
 
   useEffect(() => {
     if (progress >= 100) {
-      setTimeout(onComplete, 500); // Shorter delay before completion
+      setTimeout(onComplete, 500);
     }
   }, [progress, onComplete]);
 
   return (
-    <div className="fixed inset-0 bg-gray-900 flex flex-col items-center justify-center z-50">
-      <h1 className="text-4xl font-bold mb-8 text-white font-mono">Loading Pixel Dashboard</h1>
-      <div className="w-64 h-4 bg-gray-700 rounded-full overflow-hidden relative">
+    <div className="fixed inset-0 bg-gray-950 flex flex-col items-center justify-center z-50">
+      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Loading Pixel Dashboard</h1>
+      <div className="w-64 h-4 bg-gray-800 rounded-full overflow-hidden relative">
         <motion.div
           className="h-full bg-blue-500"
           initial={{ width: 0 }}
@@ -110,10 +110,10 @@ const LoadingPage = ({ progress, onComplete }) => {
         </div>
         <SparkleEffect />
       </div>
-      <div className="mt-4 text-xl text-white font-mono">
+      <div className="mt-4 text-xl text-blue-300 font-mono">
         {progress.toFixed(0)}%
       </div>
-      <div className="mt-8 text-gray-400 text-sm font-mono h-6">
+      <div className="mt-8 text-blue-200 text-sm font-mono h-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={coolText}
@@ -148,7 +148,7 @@ export default function LoginWithDiscord() {
           clearInterval(interval);
           return 100;
         }
-        return prev + Math.random() * 5; // Faster progress increase
+        return prev + Math.random() * 5;
       });
     }, 100);
 
@@ -171,10 +171,10 @@ export default function LoginWithDiscord() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white flex items-center justify-center relative overflow-hidden">
-      <BackgroundBubble size={300} position={{ x: '10%', y: '20%' }} color="bg-gray-700" />
-      <BackgroundBubble size={200} position={{ x: '80%', y: '50%' }} color="bg-gray-600" />
-      <BackgroundBubble size={150} position={{ x: '50%', y: '70%' }} color="bg-gray-500" />
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white flex items-center justify-center relative overflow-hidden">
+      <BackgroundBubble size={300} position={{ x: '10%', y: '20%' }} color="bg-blue-900" />
+      <BackgroundBubble size={200} position={{ x: '80%', y: '50%' }} color="bg-blue-800" />
+      <BackgroundBubble size={150} position={{ x: '50%', y: '70%' }} color="bg-blue-700" />
 
       <motion.div
         className="absolute inset-0 opacity-10"
@@ -182,12 +182,12 @@ export default function LoginWithDiscord() {
           backgroundPosition: `${mousePosition.x / 5}px ${mousePosition.y / 5}px`,
         }}
         style={{
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23FFFFFF" fill-opacity="0.2" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="3"/%3E%3Ccircle cx="13" cy="13" r="3"/%3E%3C/g%3E%3C/svg%3E")',
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%237289DA" fill-opacity="0.2" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="3"/%3E%3Ccircle cx="13" cy="13" r="3"/%3E%3C/g%3E%3C/svg%3E")',
         }}
       />
 
       <div className="relative z-10 bg-gray-800 bg-opacity-50 p-8 pt-16 rounded-2xl shadow-2xl backdrop-blur-sm max-w-md w-full">
-        <Link href="/" className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
+        <Link href="/" className="absolute top-4 left-4 text-blue-300 hover:text-blue-100 transition-colors">
           &larr; Back to Home
         </Link>
 
@@ -197,12 +197,12 @@ export default function LoginWithDiscord() {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <h1 className="text-4xl font-bold mb-6">Welcome to Pixel</h1>
-          <p className="text-gray-300 mb-8">Login with Discord to access your dashboard and unleash the full power of Pixel in your server.</p>
+          <h1 className="text-4xl font-bold mb-6 text-blue-300">Welcome to Pixel</h1>
+          <p className="text-blue-100 mb-8">Login with Discord to access your dashboard and unleash the full power of Pixel in your server.</p>
         </motion.div>
 
         <motion.button
-          className="w-full bg-indigo-600 text-white py-3 px-6 rounded-full font-bold text-lg flex items-center justify-center space-x-3 relative overflow-hidden"
+          className="w-full bg-blue-600 text-white py-3 px-6 rounded-full font-bold text-lg flex items-center justify-center space-x-3 relative overflow-hidden"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onHoverStart={() => setIsHovered(true)}
@@ -215,7 +215,7 @@ export default function LoginWithDiscord() {
           <AnimatePresence>
             {isHovered && (
               <motion.div
-                className="absolute inset-0 bg-indigo-500"
+                className="absolute inset-0 bg-blue-500"
                 initial={{ x: '-100%' }}
                 animate={{ x: '100%' }}
                 exit={{ x: '100%' }}
@@ -230,7 +230,7 @@ export default function LoginWithDiscord() {
             <div key={feature.name} className="flex flex-col items-center text-center">
               <FeatureIcon icon={feature.icon} delay={index * 0.1} />
               <motion.p
-                className="text-xs mt-2 text-gray-400"
+                className="text-xs mt-2 text-blue-200"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: index * 0.1 + 0.3 }}
@@ -242,15 +242,15 @@ export default function LoginWithDiscord() {
         </div>
 
         <motion.div
-          className="mt-12 text-center text-gray-400 text-sm"
+          className="mt-12 text-center text-blue-200 text-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
         >
           By logging in, you agree to our{' '}
-          <a href="/tos" className="text-indigo-400 hover:underline">Terms of Service</a>
+          <a href="/tos" className="text-blue-400 hover:underline">Terms of Service</a>
           {' '}and{' '}
-          <a href="/policies" className="text-indigo-400 hover:underline">Privacy Policy</a>
+          <a href="/policies" className="text-blue-400 hover:underline">Privacy Policy</a>
         </motion.div>
       </div>
     </div>
