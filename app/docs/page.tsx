@@ -7,7 +7,7 @@ import { Star, Smile, Music, Shield, Settings, HelpCircle, ChevronDown } from 'l
 
 const BackgroundBubble = ({ size, position, color }) => (
   <motion.div
-    className={`absolute rounded-full ${color} opacity-20 blur-xl`}
+    className={`absolute rounded-full ${color} opacity-10 blur-xl`}
     style={{
       width: size,
       height: size,
@@ -31,7 +31,7 @@ const SparkleEffect = () => (
     {[...Array(50)].map((_, i) => (
       <motion.div
         key={i}
-        className="absolute w-1 h-1 bg-white rounded-full"
+        className="absolute w-1 h-1 bg-blue-300 rounded-full"
         initial={{
           opacity: 0,
           x: "50%",
@@ -69,7 +69,7 @@ const LoadingPage = ({ progress, onComplete }) => {
   useEffect(() => {
     const textInterval = setInterval(() => {
       setTextIndex((prevIndex) => (prevIndex + 1) % coolTextOptions.length);
-    }, 1500); // Change text every 1.5 seconds (slightly faster)
+    }, 1500);
 
     return () => clearInterval(textInterval);
   }, []);
@@ -80,14 +80,14 @@ const LoadingPage = ({ progress, onComplete }) => {
 
   useEffect(() => {
     if (progress >= 100) {
-      setTimeout(onComplete, 300); // Shorter delay before completion
+      setTimeout(onComplete, 300);
     }
   }, [progress, onComplete]);
 
   return (
-    <div className="fixed inset-0 bg-gray-900 flex flex-col items-center justify-center z-50">
-      <h1 className="text-4xl font-bold mb-8 text-white font-mono">Loading Pixel Docs</h1>
-      <div className="w-64 h-4 bg-gray-700 rounded-full overflow-hidden relative">
+    <div className="fixed inset-0 bg-gray-950 flex flex-col items-center justify-center z-50">
+      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Loading Pixel Docs</h1>
+      <div className="w-64 h-4 bg-gray-800 rounded-full overflow-hidden relative">
         <motion.div
           className="h-full bg-blue-500"
           initial={{ width: 0 }}
@@ -100,10 +100,10 @@ const LoadingPage = ({ progress, onComplete }) => {
         </div>
         <SparkleEffect />
       </div>
-      <div className="mt-4 text-xl text-white font-mono">
+      <div className="mt-4 text-xl text-blue-300 font-mono">
         {progress.toFixed(0)}%
       </div>
-      <div className="mt-8 text-gray-400 text-sm font-mono h-6">
+      <div className="mt-8 text-blue-200 text-sm font-mono h-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={coolText}
@@ -148,34 +148,34 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => (
   <div className="relative z-10">
     <header className="container mx-auto px-4 py-6 flex justify-between items-center">
       <div className="flex items-center space-x-4">
-        <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
-          <Settings className="w-6 h-6 text-gray-300" />
+        <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center">
+          <Settings className="w-6 h-6 text-blue-100" />
         </div>
-        <span className="text-2xl font-bold">Pixel</span>
+        <span className="text-2xl font-bold text-blue-300">Pixel</span>
       </div>
       <nav className="hidden md:block">
         <ul className="flex space-x-6">
-          <li><Link href="/" className="hover:text-gray-300 transition-colors">Home</Link></li>
-          <li><Link href="/dashboard" className="hover:text-gray-300 transition-colors">Dashboard</Link></li>
-          <li><Link href="/docs" className="hover:text-gray-300 transition-colors">Docs</Link></li>
-          <li><Link href="/pricing" className="hover:text-gray-300 transition-colors">Pricing</Link></li>
+          <li><Link href="/" className="text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
+          <li><Link href="/dashboard" className="text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
+          <li><Link href="/docs" className="text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
+          <li><Link href="/pricing" className="text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
         </ul>
       </nav>
       <div className="md:hidden">
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white focus:outline-none">
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-blue-300 focus:outline-none">
           <ChevronDown className={`w-6 h-6 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
         </button>
       </div>
     </header>
 
     {isMenuOpen && (
-      <div className="md:hidden bg-gray-800 py-2">
+      <div className="md:hidden bg-gray-900 py-2">
         <nav className="container mx-auto px-4">
           <ul className="space-y-2">
-            <li><Link href="/" className="block py-2 hover:text-gray-300 transition-colors">Home</Link></li>
-            <li><Link href="/dashboard" className="block py-2 hover:text-gray-300 transition-colors">Dashboard</Link></li>
-            <li><Link href="/docs" className="block py-2 hover:text-gray-300 transition-colors">Docs</Link></li>
-            <li><Link href="/pricing" className="block py-2 hover:text-gray-300 transition-colors">Pricing</Link></li>
+            <li><Link href="/" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
+            <li><Link href="/dashboard" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
+            <li><Link href="/docs" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
+            <li><Link href="/pricing" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
           </ul>
         </nav>
       </div>
@@ -184,22 +184,22 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => (
 );
 
 const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearchQuery }) => (
-  <div className="w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white p-6 min-h-screen">
-    <h2 className="text-xl font-bold mb-6">Categories</h2>
+  <div className="w-64 bg-gradient-to-b from-gray-950 to-gray-900 text-white p-6 min-h-screen">
+    <h2 className="text-xl font-bold mb-6 text-blue-300">Categories</h2>
     <input
       type="text"
       placeholder="Search commands..."
-      className="w-full mb-4 p-2 bg-gray-800 text-white rounded-lg focus:outline-none"
+      className="w-full mb-4 p-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
     />
     <ul className="space-y-2">
       <li>
-        <h3 className="text-sm uppercase text-gray-400">INTRODUCTION</h3>
+        <h3 className="text-sm uppercase text-blue-400">INTRODUCTION</h3>
       </li>
       <li key="Introduction">
         <button
-          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Introduction' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Introduction' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}
           onClick={() => setSelectedCategory('Introduction')}
         >
           <span className="flex items-center">
@@ -208,13 +208,13 @@ const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearch
           </span>
         </button>
       </li>
-      <hr className="my-2 border-t-2 border-gray-600" />
+      <hr className="my-2 border-t-2 border-gray-800" />
       <li>
-        <h3 className="text-sm uppercase text-gray-400">COMMANDS</h3>
+        <h3 className="text-sm uppercase text-blue-400">COMMANDS</h3>
       </li>
       <li>
         <button
-          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Fun' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Fun' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}
           onClick={() => setSelectedCategory('Fun')}
         >
           <span className="flex items-center">
@@ -225,7 +225,7 @@ const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearch
       </li>
       <li>
         <button
-          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Entertainment' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Entertainment' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}
           onClick={() => setSelectedCategory('Entertainment')}
         >
           <span className="flex items-center">
@@ -236,7 +236,7 @@ const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearch
       </li>
       <li>
         <button
-          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Moderation' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Moderation' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}
           onClick={() => setSelectedCategory('Moderation')}
         >
           <span className="flex items-center">
@@ -247,7 +247,7 @@ const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearch
       </li>
       <li>
         <button
-          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Utility' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Utility' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}
           onClick={() => setSelectedCategory('Utility')}
         >
           <span className="flex items-center">
@@ -256,13 +256,13 @@ const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearch
           </span>
         </button>
       </li>
-      <hr className="my-2 border-t-2 border-gray-600" />
+      <hr className="my-2 border-t-2 border-gray-800" />
       <li>
-        <h3 className="text-sm uppercase text-gray-400">MISCELLANEOUS</h3>
+        <h3 className="text-sm uppercase text-blue-400">MISCELLANEOUS</h3>
       </li>
       <li>
         <button
-          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Premium' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'Premium' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}
           onClick={() => setSelectedCategory('Premium')}
         >
           <span className="flex items-center">
@@ -273,7 +273,7 @@ const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearch
       </li>
       <li>
         <button
-          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'FAQs' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+          className={`text-left w-full p-2 rounded-lg ${selectedCategory === 'FAQs' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}
           onClick={() => setSelectedCategory('FAQs')}
         >
           <span className="flex items-center">
@@ -289,9 +289,9 @@ const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearch
 const CommandList = ({ commands }) => (
   <div className="space-y-4">
     {commands.map((command) => (
-      <div key={command.name} className="p-4 bg-gray-800 border border-gray-600 rounded-lg">
-        <h3 className="text-lg font-bold">{command.name}</h3>
-        <p>{command.description}</p>
+      <div key={command.name} className="p-4 bg-gray-800 border border-blue-500 rounded-lg">
+        <h3 className="text-lg font-bold text-blue-300">{command.name}</h3>
+        <p className="text-blue-100">{command.description}</p>
       </div>
     ))}
   </div>
@@ -299,30 +299,30 @@ const CommandList = ({ commands }) => (
 
 const Introduction = ({ goToCommands }) => (
   <div className="p-4 relative h-full">
-    <h2 className="text-3xl font-bold mb-4">Welcome to Pixel Documentation!</h2>
-    <p className="mb-4">
+    <h2 className="text-3xl font-bold mb-4 text-blue-300">Welcome to Pixel Documentation!</h2>
+    <p className="mb-4 text-blue-100">
       Pixel is an advanced Discord bot offering a variety of features and commands across different categories, 
       including fun, entertainment, moderation, and utilities. Use Pixel to engage your server with trivia, 
       manage moderation tasks like banning and kicking, and much more.
     </p>
-    <h3 className="text-2xl font-bold mb-2">Content</h3>
-    <ul className="list-disc pl-6 space-y-2">
-      <li><strong>Getting Started</strong>: Step-by-step guide on setting up Pixel for your server.</li>
-      <li><strong>Features</strong>: Explore Pixel's various features and how they can be customized for your community.</li>
-      <li><strong>FAQs</strong>: Frequently asked questions to help troubleshoot common issues.</li>
-      <li><strong>Premium</strong>: Learn about Pixel Premium and its additional capabilities.</li>
-      <li><strong>Commands Overview</strong>: A detailed list of all commands categorized by functionality.</li>
-      <li><strong>Moderation Tools</strong>: Understand how to use Pixel's powerful moderation features like ban, kick, and mute.</li>
-      <li><strong>Fun & Entertainment</strong>: Explore Pixel's fun features like trivia, jokes,memes, and more.</li>
+    <h3 className="text-2xl font-bold mb-2 text-blue-300">Content</h3>
+    <ul className="list-disc pl-6 space-y-2 text-blue-100">
+      <li><strong className="text-blue-200">Getting Started</strong>: Step-by-step guide on setting up Pixel for your server.</li>
+      <li><strong className="text-blue-200">Features</strong>: Explore Pixel's various features and how they can be customized for your community.</li>
+      <li><strong className="text-blue-200">FAQs</strong>: Frequently aske d questions to help troubleshoot common issues.</li>
+      <li><strong className="text-blue-200">Premium</strong>: Learn about Pixel Premium and its additional capabilities.</li>
+      <li><strong className="text-blue-200">Commands Overview</strong>: A detailed list of all commands categorized by functionality.</li>
+      <li><strong className="text-blue-200">Moderation Tools</strong>: Understand how to use Pixel's powerful moderation features like ban, kick, and mute.</li>
+      <li><strong className="text-blue-200">Fun & Entertainment</strong>: Explore Pixel's fun features like trivia, jokes, memes, and more.</li>
     </ul>
-    <hr className="my-8 border-t-2 border-gray-600" />
-    <h3 className="text-2xl font-bold mb-2">Community & Support</h3>
-    <p className="mb-4">
+    <hr className="my-8 border-t-2 border-gray-800" />
+    <h3 className="text-2xl font-bold mb-2 text-blue-300">Community & Support</h3>
+    <p className="mb-4 text-blue-100">
       Join our community of users for support, feedback, and sharing ideas. Stay updated with our latest features and improvements by following our social media channels.
     </p>
     <button 
       onClick={goToCommands} 
-      className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+      className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
     >
       Go to Commands
     </button>
@@ -343,9 +343,9 @@ const App = () => {
           clearInterval(interval);
           return 100;
         }
-        return prev + Math.random() * 7; // Faster progress increase
+        return prev + Math.random() * 7;
       });
-    }, 80); // Shorter interval for quicker loading
+    }, 80);
 
     return () => clearInterval(interval);
   }, []);
@@ -359,14 +359,17 @@ const App = () => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white overflow-hidden relative">
+      <BackgroundBubble size={300} position={{ x: '10%', y: '20%' }} color="bg-blue-900" />
+      <BackgroundBubble size={200} position={{ x: '80%', y: '50%' }} color="bg-blue-800" />
+      <BackgroundBubble size={150} position={{ x: '50%', y: '70%' }} color="bg-blue-700" />
       <Sidebar
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-      <div className="flex-1 bg-gray-900 text-white">
+      <div className="flex-1 bg-gray-950 text-white">
         <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <main className="container mx-auto p-6">
           {selectedCategory === 'Introduction' ? (
