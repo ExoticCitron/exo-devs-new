@@ -86,7 +86,7 @@ const LoadingPage = ({ progress, onComplete }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-950 flex flex-col items-center justify-center z-50">
-      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Loading Pixel Docs</h1>
+      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Loading Division Docs</h1>
       <div className="w-64 h-4 bg-gray-800 rounded-full overflow-hidden relative">
         <motion.div
           className="h-full bg-blue-500"
@@ -151,7 +151,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => (
         <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center">
           <Settings className="w-6 h-6 text-blue-100" />
         </div>
-        <span className="text-2xl font-bold text-blue-300">Pixel</span>
+        <span className="text-2xl font-bold text-blue-300">Division</span>
       </div>
       <nav className="hidden md:block">
         <ul className="flex space-x-6">
@@ -299,21 +299,21 @@ const CommandList = ({ commands }) => (
 
 const Introduction = ({ goToCommands }) => (
   <div className="p-4 relative h-full">
-    <h2 className="text-3xl font-bold mb-4 text-blue-300">Welcome to Pixel Documentation!</h2>
+    <h2 className="text-3xl font-bold mb-4 text-blue-300">Welcome to Division Documentation!</h2>
     <p className="mb-4 text-blue-100">
-      Pixel is an advanced Discord bot offering a variety of features and commands across different categories, 
-      including fun, entertainment, moderation, and utilities. Use Pixel to engage your server with trivia, 
+      Division is an advanced Discord bot offering a variety of features and commands across different categories, 
+      including fun, entertainment, moderation, and utilities. Use Division to engage your server with trivia, 
       manage moderation tasks like banning and kicking, and much more.
     </p>
     <h3 className="text-2xl font-bold mb-2 text-blue-300">Content</h3>
     <ul className="list-disc pl-6 space-y-2 text-blue-100">
-      <li><strong className="text-blue-200">Getting Started</strong>: Step-by-step guide on setting up Pixel for your server.</li>
-      <li><strong className="text-blue-200">Features</strong>: Explore Pixel's various features and how they can be customized for your community.</li>
+      <li><strong className="text-blue-200">Getting Started</strong>: Step-by-step guide on setting up Division for your server.</li>
+      <li><strong className="text-blue-200">Features</strong>: Explore Division's various features and how they can be customized for your community.</li>
       <li><strong className="text-blue-200">FAQs</strong>: Frequently aske d questions to help troubleshoot common issues.</li>
-      <li><strong className="text-blue-200">Premium</strong>: Learn about Pixel Premium and its additional capabilities.</li>
+      <li><strong className="text-blue-200">Premium</strong>: Learn about Division Premium and its additional capabilities.</li>
       <li><strong className="text-blue-200">Commands Overview</strong>: A detailed list of all commands categorized by functionality.</li>
-      <li><strong className="text-blue-200">Moderation Tools</strong>: Understand how to use Pixel's powerful moderation features like ban, kick, and mute.</li>
-      <li><strong className="text-blue-200">Fun & Entertainment</strong>: Explore Pixel's fun features like trivia, jokes, memes, and more.</li>
+      <li><strong className="text-blue-200">Moderation Tools</strong>: Understand how to use Division's powerful moderation features like ban, kick, and mute.</li>
+      <li><strong className="text-blue-200">Fun & Entertainment</strong>: Explore Division's fun features like trivia, jokes, memes, and more.</li>
     </ul>
     <hr className="my-8 border-t-2 border-gray-800" />
     <h3 className="text-2xl font-bold mb-2 text-blue-300">Community & Support</h3>
