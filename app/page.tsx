@@ -89,7 +89,7 @@ const LoadingPage = ({ progress, onComplete }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-950 flex flex-col items-center justify-center z-50">
-      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Initializing Pixel</h1>
+      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Initializing Division</h1>
       <div className="w-64 h-4 bg-gray-800 rounded-full overflow-hidden relative">
         <motion.div
           className="h-full bg-blue-500"
@@ -185,12 +185,12 @@ export default function DiscordBotLanding() {
   }, []);
 
   const features = [
-    { icon: Zap, title: 'Lightning Fast', description: 'Pixel responds instantly to your commands' },
+    { icon: Zap, title: 'Lightning Fast', description: 'Division responds instantly to your commands' },
     { icon: Shield, title: 'Advanced Moderation', description: 'Keep your server safe with powerful moderation tools' },
     { icon: Music, title: 'Music Playback', description: 'Play your favorite tunes right in your Discord server' },
     { icon: Gift, title: 'Custom Rewards', description: 'Set up a reward system for your most active members' },
     { icon: Users, title: 'User Engagement', description: 'Boost user activity with fun mini-games and challenges' },
-    { icon: Star, title: 'Customizable', description: 'Tailor Pixel to fit your server\'s unique needs' },
+    { icon: Star, title: 'Customizable', description: 'Tailor Division to fit your server\'s unique needs' },
   ];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -245,7 +245,7 @@ export default function DiscordBotLanding() {
             <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center">
               <Settings className="w-6 h-6 text-blue-100" />
             </div>
-            <span className="text-2xl font-bold text-blue-300">Pixel</span>
+            <span className="text-2xl font-bold text-blue-300">Division</span>
           </div>
           <nav className="hidden md:block">
             <ul className="flex space-x-6">
@@ -283,7 +283,7 @@ export default function DiscordBotLanding() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              Meet Pixel: Your Discord Sidekick
+              Meet Division: Your Discord Sidekick
             </motion.h1>
             <motion.p 
               className="text-xl mb-8 text-blue-100"
@@ -319,14 +319,14 @@ export default function DiscordBotLanding() {
 
           <section className="text-center mb-20">
             <h2 className="text-3xl font-bold mb-6 text-blue-300">Ready to get started?</h2>
-            <p className="text-xl mb-8 text-blue-100">Join thousands of servers already using Pixel</p>
+            <p className="text-xl mb-8 text-blue-100">Join thousands of servers already using Division</p>
             <Link href="https://discord.com/oauth2/authorize?client_id=1175862600127500388&permissions=8&integration_type=0&scope=bot+applications.commands" passHref legacyBehavior>
               <motion.button 
                   className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg"
                   whileHover={{ backgroundColor: '#7289DA', scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Add Pixel Now
+                  Add Division Now
               </motion.button>
             </Link>
           </section>
@@ -336,8 +336,8 @@ export default function DiscordBotLanding() {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
               <div>
-                <h3 className="text-xl font-bold mb-4 text-blue-300">Pixel</h3>
-                <p className="text-blue-100">Elevate your Discord experience with Pixel, the ultimate bot companion.</p>
+                <h3 className="text-xl font-bold mb-4 text-blue-300">Division</h3>
+                <p className="text-blue-100">Elevate your Discord experience with Division, the ultimate bot companion.</p>
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-4 text-blue-300">Quick Links</h3>
