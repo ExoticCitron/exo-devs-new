@@ -86,7 +86,7 @@ const LoadingPage = ({ progress, onComplete }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-950 flex flex-col items-center justify-center z-50">
-      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Initializing Pixel Premium</h1>
+      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Initializing Division Premium</h1>
       <div className="w-64 h-4 bg-gray-800 rounded-full overflow-hidden relative">
         <motion.div
           className="h-full bg-blue-500"
@@ -209,7 +209,7 @@ const PremiumPage: React.FC = () => {
     { 
       icon: Code, 
       title: "Custom Integrations", 
-      description: "Tailor Pixel to your needs with custom API access and integrations." 
+      description: "Tailor Division to your needs with custom API access and integrations." 
     },
   ];
 
@@ -259,7 +259,7 @@ const PremiumPage: React.FC = () => {
       <div className="relative z-10">
         <header className="container mx-auto px-4 py-8">
           <nav className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-blue-300">Pixel</Link>
+            <Link href="/" className="text-2xl font-bold text-blue-300">Division</Link>
             <ul className="flex space-x-6">
               <li><Link href="/" className="text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
               <li><Link href="/dashboard" className="text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
@@ -277,7 +277,7 @@ const PremiumPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              Pixel Premium Plan
+              Division Premium Plan
             </motion.h1>
             <motion.p 
               className="text-xl mb-8 text-blue-100"
@@ -337,7 +337,7 @@ const PremiumPage: React.FC = () => {
 
           <section className="text-center mb-20">
             <h2 className="text-3xl font-bold mb-6 text-blue-300">Ready to Upgrade?</h2>
-            <p className="text-xl mb-8 text-blue-100">Join thousands of servers already enjoying Pixel Premium</p>
+            <p className="text-xl mb-8 text-blue-100">Join thousands of servers already enjoying Division Premium</p>
             <motion.button 
               className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg"
               whileHover={{ backgroundColor: '#7289DA', scale: 1.05 }}
@@ -353,15 +353,15 @@ const PremiumPage: React.FC = () => {
               {[
                 {
                   question: "How do I upgrade to the Premium plan?",
-                  answer: "You can upgrade to Premium directly from your Pixel dashboard. Simply log in, navigate to the 'Subscription' tab, and click 'Upgrade to Premium'."
+                  answer: "You can upgrade to Premium directly from your Division dashboard. Simply log in, navigate to the 'Subscription' tab, and click 'Upgrade to Premium'."
                 },
                 {
                   question: "Can I switch back to the free plan later?",
                   answer: "Yes, you can downgrade to the free plan at any time. Your premium features will remain active until the end of your current billing cycle."
                 },
                 {
-                  question: "Is there a limit to how many servers I can use Pixel Premium on?",
-                  answer: "No, your Pixel Premium subscription can be used on an unlimited number of servers that you own or manage."
+                  question: "Is there a limit to how many servers I can use Division Premium on?",
+                  answer: "No, your Division Premium subscription can be used on an unlimited number of servers that you own or manage."
                 },
                 {
                   question: "Do you offer discounts for non-profit or educational organizations?",
@@ -381,8 +381,8 @@ const PremiumPage: React.FC = () => {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
               <div>
-                <h3 className="text-xl font-bold mb-4 text-blue-300">Pixel</h3>
-                <p className="text-blue-100">Elevate your Discord experience with Pixel, the ultimate bot companion.</p>
+                <h3 className="text-xl font-bold mb-4 text-blue-300">Division</h3>
+                <p className="text-blue-100">Elevate your Discord experience with Division, the ultimate bot companion.</p>
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-4 text-blue-300">Quick Links</h3>
