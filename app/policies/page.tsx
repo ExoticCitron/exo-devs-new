@@ -125,7 +125,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => (
         <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
           <Lock className="w-6 h-6 text-gray-300" />
         </div>
-        <span className="text-2xl font-bold">Pixel</span>
+        <span className="text-2xl font-bold">Division</span>
       </div>
       <nav className="hidden md:block">
         <ul className="flex space-x-6">
@@ -193,12 +193,12 @@ const PrivacyPolicy = () => {
         <div className="space-y-6">
           <section>
             <h2 className="text-2xl font-semibold mb-4">1. Information We Collect</h2>
-            <p>We collect information you provide directly to us when you use Pixel. This may include your Discord user ID, server ID, and any messages or commands you send to the bot.</p>
+            <p>We collect information you provide directly to us when you use Division. This may include your Discord user ID, server ID, and any messages or commands you send to the bot.</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">2. How We Use Your Information</h2>
-            <p>We use the information we collect to operate, maintain, and improve Pixel. This includes personalizing features and content, and providing you with a better experience.</p>
+            <p>We use the information we collect to operate, maintain, and improve Division. This includes personalizing features and content, and providing you with a better experience.</p>
           </section>
 
           <section>
@@ -228,14 +228,14 @@ const PrivacyPolicy = () => {
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">8. Contact Us</h2>
-            <p>If you have any questions about this Privacy Policy, please contact us at privacy@pixelbot.com.</p>
+            <p>If you have any questions about this Privacy Policy, please contact us at privacy@Divisionbot.com.</p>
           </section>
         </div>
       </main>
 
       <footer className="bg-gray-900 py-6 mt-12">
         <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2024 Pixel Bot. All rights reserved.</p>
+          <p>&copy; 2024 Division Bot. All rights reserved.</p>
         </div>
       </footer>
     </div>
