@@ -96,7 +96,7 @@ const LoadingPage = ({ progress, onComplete }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-950 flex flex-col items-center justify-center z-50">
-      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Loading Pixel Dashboard</h1>
+      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Loading Division Dashboard</h1>
       <div className="w-64 h-4 bg-gray-800 rounded-full overflow-hidden relative">
         <motion.div
           className="h-full bg-blue-500"
@@ -197,8 +197,8 @@ export default function LoginWithDiscord() {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <h1 className="text-4xl font-bold mb-6 text-blue-300">Welcome to Pixel</h1>
-          <p className="text-blue-100 mb-8">Login with Discord to access your dashboard and unleash the full power of Pixel in your server.</p>
+          <h1 className="text-4xl font-bold mb-6 text-blue-300">Welcome to Division</h1>
+          <p className="text-blue-100 mb-8">Login with Discord to access your dashboard and unleash the full power of Division in your server.</p>
         </motion.div>
 
         <motion.button
