@@ -125,7 +125,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => (
         <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
           <FileText className="w-6 h-6 text-gray-300" />
         </div>
-        <span className="text-2xl font-bold">Pixel</span>
+        <span className="text-2xl font-bold">Division</span>
       </div>
       <nav className="hidden md:block">
         <ul className="flex space-x-6">
@@ -193,32 +193,32 @@ const TermsOfService = () => {
         <div className="space-y-6">
           <section>
             <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
-            <p>By using Pixel, you agree to be bound by these Terms of Service. If you don't agree to these terms, please do not use our bot.</p>
+            <p>By using Division, you agree to be bound by these Terms of Service. If you don't agree to these terms, please do not use our bot.</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">2. Use of Service</h2>
-            <p>Pixel is provided "as is" and is intended for use in Discord servers. You agree not to misuse our services or help anyone else do so.</p>
+            <p>Division is provided "as is" and is intended for use in Discord servers. You agree not to misuse our services or help anyone else do so.</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">3. User Responsibilities</h2>
-            <p>You are responsible for all activity that occurs under your account. You must not use Pixel for any illegal or unauthorized purpose.</p>
+            <p>You are responsible for all activity that occurs under your account. You must not use Division for any illegal or unauthorized purpose.</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">4. Intellectual Property Rights</h2>
-            <p>Pixel and its original content, features, and functionality are owned by us and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</p>
+            <p>Division and its original content, features, and functionality are owned by us and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">5. Termination</h2>
-            <p>We may terminate or suspend your access to Pixel immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+            <p>We may terminate or suspend your access to Division immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">6. Limitation of Liability</h2>
-            <p>In no event shall we be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use Pixel.</p>
+            <p>In no event shall we be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use Division.</p>
           </section>
 
           <section>
@@ -228,14 +228,14 @@ const TermsOfService = () => {
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">8. Contact Us</h2>
-            <p>If you have any questions about these Terms, please contact us at support@pixelbot.com.</p>
+            <p>If you have any questions about these Terms, please contact us at support@Divisionbot.com.</p>
           </section>
         </div>
       </main>
 
       <footer className="bg-gray-900 py-6 mt-12">
         <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2024 Pixel Bot. All rights reserved.</p>
+          <p>&copy; 2024 Division Bot. All rights reserved.</p>
         </div>
       </footer>
     </div>
