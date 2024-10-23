@@ -1,29 +1,128 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Shield, CheckCircle } from 'lucide-react'
-import ReCAPTCHA from "react-google-recaptcha"
+import { Shield, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react'
+
+// You would typically store these in environment variables
+const DISCORD_CLIENT_ID = '1175862600127500388'
+const REDIRECT_URI = 'http://exo-devs.tech/callback'
+
+function CustomCaptcha({ onVerify }) {
+  const [captchaText, setCaptchaText] = useState('')
+  const [userInput, setUserInput] = useState('')
+  const [isValid, setIsValid] = useState(false)
+
+  const generateCaptcha = () => {
+    const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'
+    let result = ''
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    setCaptchaText(result)
+    setUserInput('')
+    setIsValid(false)
+  }
+
+  useEffect(() => {
+    generateCaptcha()
+  }, [])
+
+  const handleInputChange = (e) => {
+    const input = e.target.value
+    setUserInput(input)
+    setIsValid(input === captchaText)
+    if (input === captchaText) {
+      onVerify(true)
+    } else {
+      onVerify(false)
+    }
+  }
+
+  return (
+    <div className="flex flex-col items-center space-y-4">
+      <div className="bg-gray-800 p-4 rounded-lg">
+        <span className="text-2xl font-bold tracking-wider text-blue-300 select-none">
+          {captchaText}
+        </span>
+      </div>
+      <div className="flex items-center space-x-2">
+        <input
+          type="text"
+          value={userInput}
+          onChange={handleInputChange}
+          className="bg-gray-700 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter CAPTCHA"
+        />
+        <button onClick={generateCaptcha} className="text-blue-300 hover:text-blue-100">
+          <RefreshCw className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+  )
+}
 
 export default function DiscordVerification() {
   const [step, setStep] = useState(1)
-  const [captchaValue, setCaptchaValue] = useState(null)
+  const [captchaVerified, setCaptchaVerified] = useState(false)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const code = urlParams.get('code')
+    if (code) {
+      handleDiscordCallback(code)
+    }
+  }, [])
 
   const handleDiscordAuth = () => {
-    // In a real implementation, this would redirect to Discord OAuth
-    console.log("Redirecting to Discord OAuth...")
-    setTimeout(() => setStep(2), 1000) // Simulate OAuth completion
+    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`
+    window.location.href = discordAuthUrl
   }
 
-  const handleCaptchaChange = (value) => {
-    setCaptchaValue(value)
+  const handleDiscordCallback = async (code) => {
+    try {
+      const response = await fetch('/api/discord-callback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setStep(2)
+      } else {
+        throw new Error(data.message || 'Failed to authenticate with Discord')
+      }
+    } catch (err) {
+      setError(err.message)
+    }
   }
 
-  const handleVerification = () => {
-    if (captchaValue) {
-      // In a real implementation, you would verify the captcha server-side
-      console.log("Verifying captcha...")
-      setStep(3)
+  const handleCaptchaVerification = (isValid) => {
+    setCaptchaVerified(isValid)
+  }
+
+  const handleVerification = async () => {
+    if (captchaVerified) {
+      try {
+        const response = await fetch('/api/verify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ captchaVerified }),
+        })
+        const data = await response.json()
+        if (response.ok) {
+          setStep(3)
+        } else {
+          throw new Error(data.message || 'Verification failed')
+        }
+      } catch (err) {
+        setError(err.message)
+      }
     }
   }
 
@@ -37,6 +136,17 @@ export default function DiscordVerification() {
       >
         <h2 className="text-3xl font-bold mb-6 text-center text-blue-300">Discord Verification</h2>
         
+        {error && (
+          <motion.div
+            className="bg-red-500 text-white p-4 rounded-lg mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <AlertCircle className="inline-block mr-2" />
+            {error}
+          </motion.div>
+        )}
+
         {step === 1 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -60,18 +170,14 @@ export default function DiscordVerification() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <p className="text-blue-100 mb-6 text-center">Great! Now please complete the captcha below.</p>
+            <p className="text-blue-100 mb-6 text-center">Great! Now please complete the CAPTCHA below.</p>
             <div className="flex justify-center mb-6">
-              <ReCAPTCHA
-                sitekey="YOUR_RECAPTCHA_SITE_KEY"
-                onChange={handleCaptchaChange}
-                theme="dark"
-              />
+              <CustomCaptcha onVerify={handleCaptchaVerification} />
             </div>
             <button 
               onClick={handleVerification}
-              className={`w-full ${captchaValue ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 cursor-not-allowed'} text-white px-6 py-3 rounded-full font-bold text-lg transition-colors`}
-              disabled={!captchaValue}
+              className={`w-full ${captchaVerified ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 cursor-not-allowed'} text-white px-6 py-3 rounded-full font-bold text-lg transition-colors`}
+              disabled={!captchaVerified}
             >
               Verify
             </button>
