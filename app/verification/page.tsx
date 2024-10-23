@@ -5,10 +5,10 @@ import { motion } from 'framer-motion'
 import { Shield, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react'
 
 // You would typically store these in environment variables
-const DISCORD_CLIENT_ID = '1175862600127500388'
-const REDIRECT_URI = 'https://exo-devs.tech/callback'
+const DISCORD_CLIENT_ID = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID
+const REDIRECT_URI = `${process.env.NEXT_PUBLIC_BASE_URL}/verification`
 
-function CustomCaptcha({ onVerify }) {
+function CustomCaptcha({ onVerify }: { onVerify: (isValid: boolean) => void }) {
   const [captchaText, setCaptchaText] = useState('')
   const [userInput, setUserInput] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -28,15 +28,12 @@ function CustomCaptcha({ onVerify }) {
     generateCaptcha()
   }, [])
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value
     setUserInput(input)
-    setIsValid(input === captchaText)
-    if (input === captchaText) {
-      onVerify(true)
-    } else {
-      onVerify(false)
-    }
+    const valid = input === captchaText
+    setIsValid(valid)
+    onVerify(valid)
   }
 
   return (
@@ -65,7 +62,8 @@ function CustomCaptcha({ onVerify }) {
 export default function DiscordVerification() {
   const [step, setStep] = useState(1)
   const [captchaVerified, setCaptchaVerified] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
+  const [userData, setUserData] = useState<any>(null)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -76,11 +74,11 @@ export default function DiscordVerification() {
   }, [])
 
   const handleDiscordAuth = () => {
-    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify`
+    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20guilds`
     window.location.href = discordAuthUrl
   }
 
-  const handleDiscordCallback = async (code) => {
+  const handleDiscordCallback = async (code: string) => {
     try {
       const response = await fetch('/api/discord-callback', {
         method: 'POST',
@@ -89,18 +87,24 @@ export default function DiscordVerification() {
         },
         body: JSON.stringify({ code }),
       })
-      const data = await response.json()
-      if (response.ok) {
-        setStep(2)
-      } else {
-        throw new Error(data.message || 'Failed to authenticate with Discord')
+      
+      if (!response.ok) {
+        const errorData = await response.text()
+        console.error('Discord callback failed:', errorData)
+        throw new Error('Failed to authenticate with Discord')
       }
+      
+      const data = await response.json()
+      console.log('Discord user data:', data)
+      setUserData(data)
+      setStep(2)
     } catch (error: any) {
+      console.error('Discord callback error:', error)
       setError(error.message || 'An error occurred during Discord authentication')
     }
   }
 
-  const handleCaptchaVerification = (isValid) => {
+  const handleCaptchaVerification = (isValid: boolean) => {
     setCaptchaVerified(isValid)
   }
 
@@ -112,7 +116,7 @@ export default function DiscordVerification() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ captchaVerified }),
+          body: JSON.stringify({ captchaVerified, userData }),
         })
         const data = await response.json()
         if (response.ok) {
@@ -194,6 +198,14 @@ export default function DiscordVerification() {
             <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-4 text-blue-300">Verification Complete!</h3>
             <p className="text-blue-100">You are now verified. Enjoy your access to the server!</p>
+            {userData && (
+              <div className="mt-4 text-left">
+                <h4 className="text-lg font-semibold mb-2">Your Discord Info:</h4>
+                <p>Username: {userData.username}</p>
+                <p>ID: {userData.id}</p>
+                <p>Email: {userData.email}</p>
+              </div>
+            )}
           </motion.div>
         )}
       </motion.div>
