@@ -6,7 +6,7 @@ import { Shield, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react'
 
 // You would typically store these in environment variables
 const DISCORD_CLIENT_ID = '1175862600127500388'
-const REDIRECT_URI = 'http://exo-devs.tech/callback'
+const REDIRECT_URI = 'https://exo-devs.tech/callback'
 
 function CustomCaptcha({ onVerify }) {
   const [captchaText, setCaptchaText] = useState('')
@@ -95,8 +95,8 @@ export default function DiscordVerification() {
       } else {
         throw new Error(data.message || 'Failed to authenticate with Discord')
       }
-    } catch (err) {
-      setError(err.message)
+    } catch (error: any) {
+      setError(error.message || 'An error occurred during Discord authentication')
     }
   }
 
@@ -120,8 +120,8 @@ export default function DiscordVerification() {
         } else {
           throw new Error(data.message || 'Verification failed')
         }
-      } catch (err) {
-        setError(err.message)
+      } catch (error: any) {
+        setError(error.message || 'An error occurred during verification')
       }
     }
   }
