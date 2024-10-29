@@ -28,7 +28,8 @@
     "typescript": "^5"
   },
   "scripts": {
-    "setup": "npm install shadcn && npx shadcn add card && npx shadcn add input && npx shadcn add select && npx shadcn add button && npx shadcn add badge",
+    "presetup": "echo '{}' > components.json",
+    "setup": "npm install shadcn && npx shadcn add card --force && npx shadcn add input --force && npx shadcn add select --force && npx shadcn add button --force && npx shadcn add badge --force",
     "build": "npm run build"
   },
   "engines": {
