@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean": "rm -f components.json && rm -rf components/ui",
-    "presetup": "mkdir -p components/ui && echo '{ \"components\": [{\"name\": \"card\"}, {\"name\": \"input\"}, {\"name\": \"select\"}, {\"name\": \"button\"}, {\"name\": \"badge\"}] }' > components.json",
-    "createfiles": "mkdir -p components/ui && touch components/ui/card.tsx components/ui/input.tsx components/ui/select.tsx components/ui/button.tsx components/ui/badge.tsx"
-    "setup": "npx shadcn init --yes --force && npx shadcn add card --yes --force && npx shadcn add input --yes --force && npx shadcn add select --yes --force && npx shadcn add button --yes --force && npx shadcn add badge --yes --force"
+    "clean": "rm -f components.json && rm -rf components/ui", 
+    "presetup": "mkdir -p components/ui", "initcomponents": "if [ ! -f components.json ]; then npx shadcn init -- --yes; fi", 
+    "createfiles": "touch components/ui/card.tsx components/ui/input.tsx components/ui/select.tsx components/ui/button.tsx components/ui/badge.tsx", 
+    "setup": "npx shadcn add card -- --yes && npx shadcn add input -- --yes && npx shadcn add select -- --yes && npx shadcn add button -- --yes && npx shadcn add badge -- --yes",
   },
   "dependencies": {
     "framer-motion": "^11.9.0",
