@@ -27,7 +27,6 @@
         "react-countup": "^6.5.3",
         "react-dom": "^18",
         "react-particles": "^2.12.2",
-        "react-tsparticles": "^2.12.2",
         "shadcn": "latest",
         "tailwind-merge": "^2.5.4",
         "tailwindcss-animate": "^1.0.7",
