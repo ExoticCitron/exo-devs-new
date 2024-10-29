@@ -25,5 +25,9 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
     "typescript": "^5"
+  },
+  "scripts": {
+    "setup": "npm install shadcn && npx shadcn add card && npx shadcn add input && npx shadcn add select && npx shadcn add button && npx shadcn add badge",
+    "build": "npm run build"
   }
 }
