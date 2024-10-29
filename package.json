@@ -33,6 +33,6 @@
     "build": "npm run build"
   },
   "engines": {
-    "node": "16.x"
+    "node": ">=18.17.0"
   }
 }
