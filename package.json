@@ -1,38 +1,52 @@
 {
-  "name": "exo-devs.tech",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "clean": "rm -f components.json && rm -rf components/ui", 
-    "presetup": "mkdir -p components/ui", 
-    "initcomponents": "if [ ! -f components.json ]; then npx shadcn init -- --yes; fi", 
-    "createfiles": "touch components/ui/card.tsx components/ui/input.tsx components/ui/select.tsx components/ui/button.tsx components/ui/badge.tsx", 
-    "setup": "npx shadcn add card -- --yes && npx shadcn add input -- --yes && npx shadcn add select -- --yes && npx shadcn add button -- --yes && npx shadcn add badge -- --yes"
-  },
-  "dependencies": {
-    "framer-motion": "^11.9.0",
-    "lucide-react": "^0.446.0",
-    "next": "14.2.13",
-    "react": "^18",
-    "react-dom": "^18"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^8",
-    "shadcn": "latest",
-    "eslint-config-next": "14.2.13",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13",
-    "typescript": "^5"
-  },
-  "engines": {
-    "node": ">=18.17.0"
+    "name": "exo-devs.tech",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "next lint",
+      "clean": "rm -f components.json && rm -rf components/ui", 
+      "presetup": "mkdir -p components/ui", 
+      "initcomponents": "if [ ! -f components.json ]; then npx shadcn init -- --yes; fi", 
+      "createfiles": "touch components/ui/card.tsx components/ui/input.tsx components/ui/select.tsx components/ui/button.tsx components/ui/badge.tsx", 
+      "setup": "npx shadcn add card -- --yes && npx shadcn add input -- --yes && npx shadcn add select -- --yes && npx shadcn add button -- --yes && npx shadcn add badge -- --yes"
+    },
+    "dependencies": {
+        "@auth/core": "^0.34.2",
+        "@radix-ui/react-select": "^2.1.2",
+        "@radix-ui/react-slot": "^1.1.0",
+        "class-variance-authority": "^0.7.0",
+        "clsx": "^2.1.1",
+        "framer-motion": "^11.11.1",
+        "lucide-react": "^0.446.0",
+        "next": "^15.0.2",
+        "next-auth": "^4.24.10",
+        "react": "^18",
+        "react-countup": "^6.5.3",
+        "react-dom": "^18",
+        "react-particles": "^2.12.2",
+        "react-tsparticles": "^2.12.2",
+        "shadcn": "latest",
+        "tailwind-merge": "^2.5.4",
+        "tailwindcss-animate": "^1.0.7",
+        "tsparticles": "^3.5.0",
+        "tsparticles-engine": "^2.12.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "autoprefixer": "^10.4.20",
+        "eslint": "^8",
+        "shadcn": "latest",
+        "eslint-config-next": "14.2.13",
+        "postcss": "^8.4.47",
+        "tailwindcss": "^3.4.13",
+        "typescript": "^5"
+    },
+    "engines": {
+      "node": ">=18.17.0"
+    }
   }
-}
