@@ -29,9 +29,10 @@
   },
   "scripts": {
     "clean": "rm -f components.json && rm -rf components/ui", 
-    "presetup": "mkdir -p components/ui && if [ ! -f components.json ]; then echo '{\"components\": []}' > components.json; fi",
-    "createfiles": "touch components/ui/card.tsx && touch components/ui/input.tsx && touch components/ui/select.tsx && touch components/ui/button.tsx && touch components/ui/badge.tsx", 
-    "setup": "if [ -f components.json ]; then npx shadcn init && npx shadcn add card && npx shadcn add input && npx shadcn add select && npx shadcn add button && npx shadcn add badge; fi",
+    "presetup": "mkdir -p components/ui", 
+    "initcomponents": "if [ ! -f components.json ]; then npx shadcn init -- --yes; fi", 
+    "createfiles": "touch components/ui/card.tsx components/ui/input.tsx components/ui/select.tsx components/ui/button.tsx components/ui/badge.tsx", 
+    "setup": "npx shadcn add card -- --yes && npx shadcn add input -- --yes && npx shadcn add select -- --yes && npx shadcn add button -- --yes && npx shadcn add badge -- --yes", 
     "build": "npm run build"
   },
   "engines": {
