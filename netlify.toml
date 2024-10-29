@@ -1,0 +1,10 @@
+[build]
+  command = "npm install && npm install shadcn && npx shadcn add card && npx shadcn add input && npx shadcn add select && npx shadcn add button && npx shadcn add badge && npm run build"
+  publish = "build"
+
+[build.environment]
+  NODE_VERSION = "14"
+
+[plugins]
+  [[plugins]]
+    package = "@netlify/plugin-nextjs"
