@@ -28,9 +28,10 @@
     "typescript": "^5"
   },
   "scripts": {
-    "presetup": "mkdir -p components/ui && echo '{}' > components.json", 
+    "presetup": "mkdir -p components/ui && echo '{\"components\": []}' > components.json", 
+    "init": "npx shadcn init", 
     "createfiles": "touch components/ui/card.tsx && touch components/ui/input.tsx && touch components/ui/select.tsx && touch components/ui/button.tsx && touch components/ui/badge.tsx", 
-    "setup": "npm install shadcn && npx shadcn add card -- --yes && npx shadcn add input -- --yes && npx shadcn add select -- --yes && npx shadcn add button -- --yes && npx shadcn add badge -- --yes",
+    "setup": "npm run init && npx shadcn add card && npx shadcn add input && npx shadcn add select && npx shadcn add button && npx shadcn add badge",
     "build": "npm run build"
   },
   "engines": {
