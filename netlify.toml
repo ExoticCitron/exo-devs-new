@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run clean && npm run createfiles && npm run presetup && npm run setup && npm run build"
+  command = "npm install && npm run clean && npm run presetup && npm run createfiles && npm run setup && npm run build"
   publish = "build"
 
 
