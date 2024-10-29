@@ -30,5 +30,8 @@
   "scripts": {
     "setup": "npm install shadcn && npx shadcn add card && npx shadcn add input && npx shadcn add select && npx shadcn add button && npx shadcn add badge",
     "build": "npm run build"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
