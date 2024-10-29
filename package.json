@@ -29,8 +29,7 @@
   },
   "scripts": {
     "clean": "rm -f components.json && rm -rf components/ui", 
-    "presetup": "mkdir -p components/ui", 
-    "initcomponents": "if [ ! -f components.json ]; then npx shadcn init -- --yes; fi", 
+    "presetup": "mkdir -p components/ui && echo '{\"components\": []}' > components.json", 
     "createfiles": "touch components/ui/card.tsx components/ui/input.tsx components/ui/select.tsx components/ui/button.tsx components/ui/badge.tsx", 
     "setup": "npx shadcn add card -- --yes && npx shadcn add input -- --yes && npx shadcn add select -- --yes && npx shadcn add button -- --yes && npx shadcn add badge -- --yes", 
     "build": "npm run build"
