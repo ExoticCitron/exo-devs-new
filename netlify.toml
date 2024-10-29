@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run clean && npm run presetup && npm run initcomponents && npm run createfiles && npm run setup && npm run build"
+  command = "npm install && npm run createfiles && npm run initcomponents && npm run setup && npm run build"
   publish = "build"
 
 [build.environment]
