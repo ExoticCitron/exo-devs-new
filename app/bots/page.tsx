@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,8 +15,8 @@ const initialBots = [
     name: "Arcane",
     description: "The Best Discord Bot. No questions asked...",
     memberCount: 50000000,
-    image: "https://media.discordapp.net/attachments/1271860096791740519/1300774723981938769/Untitled.png?ex=6722105d&is=6720bedd&hm=02903a2371db648c31086e3fc00b5346bc0f0a1999046fe72616609ee582adee&=&format=webp&quality=lossless&height=100&width=100",
-    verified: true,
+    image: "https://cdn.discordapp.com/avatars/437808476106784770/def5e0a7ff07e73d477a87df10a3dc4f.png?height=100&width=100",
+    verified: false,
     website: "https://arcane.bot"
   },
   {
@@ -24,8 +24,8 @@ const initialBots = [
     name: "Xenon",
     description: "Keep your server safe with advanced backup tools.",
     memberCount: 7500000,
-    image: "https://media.discordapp.net/attachments/1276963109554098216/1300776185340629033/Untitled.png?ex=672211b9&is=6720c039&hm=09c0d37e0b2940dcdd416e7159509d9a1e07e3c65e5462adab9968f9c0b6be5b&=&format=webp&quality=lossless&height=100&width=100",
-    verified: true,
+    image: "https://cdn.discordapp.com/avatars/416358583220043796/4a963aeddc8ab926b37663d1704e93e2.png?height=100&width=100",
+    verified: false,
     website: "https://xenon.bot"
   },
   {
@@ -42,24 +42,42 @@ const initialBots = [
     name: "WelcomeBot",
     description: "Greet new members with customizable welcome messages.",
     memberCount: 100000,
-    image: "https://media.discordapp.net/attachments/1276963109554098216/1300776768537497611/images.png?ex=67221244&is=6720c0c4&hm=80b5f44ad38c4ae7a495357d7f10cf0d11e90501f1ab1328a494a285be09c13b&=&format=webp&quality=lossless&height=100&width=100",
-    verified: false
+    image: "https://cdn.discordapp.com/avatars/330416853971107840/5f65708fd35ee3844a463d5bf9fe7828.png?height=100&width=100",
+    verified: false,
+    website: "https://welcomer.gg"
   }
 ]
 
 const ParticleBackground = () => {
+  const [particles, setParticles] = useState([])
+
+  useEffect(() => {
+    const generateParticles = () => {
+      return Array.from({ length: 50 }, (_, i) => ({
+        id: i,
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        width: `${Math.random() * 4 + 1}px`,
+        height: `${Math.random() * 4 + 1}px`,
+        duration: `${Math.random() * 10 + 5}s`
+      }))
+    }
+
+    setParticles(generateParticles())
+  }, [])
+
   return (
     <div className="fixed inset-0 pointer-events-none">
-      {[...Array(50)].map((_, i) => (
+      {particles.map((particle) => (
         <div
-          key={i}
+          key={particle.id}
           className="absolute rounded-full bg-gray-300 opacity-10"
           style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            width: `${Math.random() * 4 + 1}px`,
-            height: `${Math.random() * 4 + 1}px`,
-            animation: `float ${Math.random() * 10 + 5}s linear infinite`,
+            top: particle.top,
+            left: particle.left,
+            width: particle.width,
+            height: particle.height,
+            animation: `float ${particle.duration} linear infinite`
           }}
         />
       ))}
@@ -96,9 +114,9 @@ export default function MetallicDiscordBotDashboard() {
               onMouseLeave={() => setIsLogoHovered(false)}
             >
             <div 
-              className={`w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out ${isLogoHovered ? 'scale-110' : ''}`}
+              className={`w-12 h-12 bg-blue-700 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out ${isLogoHovered ? 'scale-110 shadow-lg shadow-blue-500/50' : ''}`}
             >
-              <Settings className={`w-6 h-6 text-blue-100 transition-all duration-300 ease-in-out ${isLogoHovered ? 'animate-spin' : ''}`} />
+              <Settings className={`w-6 h-6 text-blue-100 transition-all duration-300 ease-in-out ${isLogoHovered ? 'animate-spin-slow' : ''}`} />
             </div>
             <span className={`text-2xl font-bold text-blue-300 transition-all duration-300 ease-in-out ${isLogoHovered ? 'scale-110' : ''}`}>Division</span>
           </div>
@@ -169,29 +187,38 @@ export default function MetallicDiscordBotDashboard() {
             {filteredAndSortedBots.map(bot => (
               <Card key={bot.id} className="bg-gradient-to-br from-gray-900 to-black border-0 transition-all duration-300 transform hover:-translate-y-1 group overflow-hidden shadow-[0_0_0_3px_rgba(255,255,255,0.1)] hover:shadow-[0_0_0_3px_rgba(255,255,255,0.2),0_0_20px_rgba(255,255,255,0.2)]">
                 <CardHeader className={`flex ${isGridView ? 'flex-col' : 'flex-row'} items-center space-y-4 md:space-y-0 md:space-x-4`}>
-                  <img src={bot.image} alt={bot.name} className="w-24 h-24 rounded-full border-2 border-gray-300 p-1 bg-gray-900" />
-                  <div className={`${isGridView ? 'text-center' : 'text-left'}`}>
+                  <div className="relative">
+                    <img src={bot.image} alt={bot.name} className="w-24 h-24 rounded-full border-2 border-gray-300 p-1 bg-gray-900 object-cover" />
+                    {bot.verified && (
+                      <div className="absolute bottom-0 right-0">
+                        <div className="group/verified relative">
+                          <CheckCircle2 className="w-6 h-6 text-blue-400 bg-gray-900 rounded-full p-1 border-2 border-gray-300 glow-white" />
+                          <span className="absolute bottom-full right-0 mb-2 hidden group-hover/verified:block bg-gray-700 text-white text-xs py-1 px-2 rounded pointer-events-none">Division LLC</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className={`${isGridView ? 'text-center' : 'text-left'} flex-grow`}>
                     <CardTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-300 to-white">
                       {bot.name}
                     </CardTitle>
                     <div className="flex items-center mt-2 space-x-2">
                       <Badge variant="secondary" className="bg-gray-700 text-gray-200 hover:bg-gray-700 hover:text-white transition-colors duration-200 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-                        {bot.verified ? (
-                          <CheckCircle2 className="w-4 h-4 mr-1 text-blue-400" />
-                        ) : (
-                          <Sparkles className="w-4 h-4 mr-1" />
-                        )}
+                        <Sparkles className="w-4 h-4 mr-1" />
                         {bot.memberCount.toLocaleString()} members
                       </Badge>
                       {bot.website && (
-                        <a
-                          href={bot.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-300 hover:text-white transition-colors duration-200"
-                        >
-                          <Globe className="w-5 h-5 hover:glow-white" />
-                        </a>
+                        <div className="relative group/website">
+                          <a
+                            href={bot.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-300 hover:text-white transition-colors duration-200"
+                          >
+                            <Globe className="w-5 h-5 hover:glow-white" />
+                          </a>
+                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover/website:block bg-gray-700 text-white text-xs py-1 px-2 rounded whitespace-nowrap pointer-events-none">Website</span>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -199,10 +226,17 @@ export default function MetallicDiscordBotDashboard() {
                 <CardContent>
                   <p className="text-gray-300">{bot.description}</p>
                 </CardContent>
-                <CardFooter>
-                  <Button className="w-full bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-white/20">
-                    View Bot
-                  </Button>
+                <CardFooter className={`${isGridView ? '' : 'pr-4'}`}>
+                  <a
+                    href={bot.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-full ${isGridView ? '' : 'max-w-[200px]'}`}
+                  >
+                    <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 glow-button">
+                      View Bot
+                    </Button>
+                  </a>
                 </CardFooter>
               </Card>
             ))}
@@ -222,11 +256,12 @@ export default function MetallicDiscordBotDashboard() {
                 <li><Link href="/" className="text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
                 <li><Link href="/docs" className="text-blue-200 hover:text-blue-100 transition-colors">Features</Link></li>
                 <li><Link href="/pricing" className="text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
-                <li><Link href="/" className="text-blue-200 hover:text-blue-100 transition-colors">Support</Link></li>
+                <li><Link  href="/" className="text-blue-200 hover:text-blue-100 transition-colors">Support</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="text-xl font-bold mb-4 text-blue-300">Community</h3>
+              
               <ul className="space-y-2">
                 <li><Link href="https://discord.gg/vRcZHQAUN8" className="text-blue-200 hover:text-blue-100 transition-colors">Discord Server</Link></li>
                 <li><Link href="https://twitter.com" className="text-blue-200 hover:text-blue-100 transition-colors">Twitter</Link></li>
@@ -246,16 +281,51 @@ export default function MetallicDiscordBotDashboard() {
         </div>
       </footer>
       <style jsx>{`
-        @keyframes spin {
-          from {
+        @keyframes float {
+          0%, 100% {
+            transform: translate(0, 0);
+          }
+          25% {
+            transform: translate(10px, -10px);
+          }
+          50% {
+            transform: translate(0, -20px);
+          }
+          75% {
+            transform: translate(-10px, -10px);
+          }
+        }
+        @keyframes spin-slow {
+          0% {
             transform: rotate(0deg);
           }
-          to {
+          100% {
             transform: rotate(360deg);
           }
         }
-        .animate-spin {
-          animation: spin 2s linear infinite;
+        .animate-spin-slow {
+          animation: spin-slow 3.5s linear infinite;
+        }
+        .glow-white {
+          filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7));
+        }
+        .glow-button {
+          position: relative;
+          overflow: hidden;
+        }
+        .glow-button::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .glow-button:hover::before {
+          opacity: 1;
         }
       `}</style>
     </div>
