@@ -12,39 +12,37 @@ import { Search, Grid, List, Sparkles, CheckCircle2, Globe, ChevronDown, Setting
 const initialBots = [
   {
     id: 1,
-    name: "Arcane",
+    name: "xDefender",
     description: "The Best Discord Bot. No questions asked...",
-    memberCount: 50000000,
-    image: "https://cdn.discordapp.com/avatars/437808476106784770/def5e0a7ff07e73d477a87df10a3dc4f.png?height=100&width=100",
+    memberCount: 3500,
+    image: "https://cdn.discordapp.com/avatars/1175862600127500388/822fb1ca0db2897b2e3ee6d265f20e7b.png?height=100&width=100",
     verified: false,
-    website: "https://arcane.bot"
+    website: "https://exo-devs.tech"
   },
   {
     id: 2,
-    name: "Xenon",
-    description: "Keep your server safe with advanced backup tools.",
-    memberCount: 7500000,
-    image: "https://cdn.discordapp.com/avatars/416358583220043796/4a963aeddc8ab926b37663d1704e93e2.png?height=100&width=100",
-    verified: false,
-    website: "https://xenon.bot"
-  },
+    name: "FluxBackup",
+    description: "Keep your server safe with advanced backup tools - soon",
+    memberCount: 0,
+    image: "https://i.pinimg.com/736x/4f/f7/7b/4ff77b4cadd5ef2e596b25f2cc5b1b8a.jpg?height=100&width=100",
+    verified: false
+    },
   {
     id: 3,
     name: "Division",
     description: "Algorithm powered anti-nuke service.",
-    memberCount: 3000000,
+    memberCount: 750,
     image: "https://cdn.discordapp.com/avatars/1175862600127500388/822fb1ca0db2897b2e3ee6d265f20e7b.png?height=100&width=100",
     verified: true,
     website: "https://exo-devs.tech/"
   },
   {
     id: 4,
-    name: "WelcomeBot",
+    name: "Sequence [SOON]",
     description: "Greet new members with customizable welcome messages.",
-    memberCount: 100000,
-    image: "https://cdn.discordapp.com/avatars/330416853971107840/5f65708fd35ee3844a463d5bf9fe7828.png?height=100&width=100",
-    verified: false,
-    website: "https://welcomer.gg"
+    memberCount: 0,
+    image: "https://i.pinimg.com/736x/4f/f7/7b/4ff77b4cadd5ef2e596b25f2cc5b1b8a.jpg?height=100&width=100",
+    verified: false
   }
 ]
 
