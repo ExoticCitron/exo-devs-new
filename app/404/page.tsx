@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Home } from 'lucide-react'
 
-const Star = ({ delay, initialPosition }: { delay: number; initialPosition: { x: number; y: number } }) => {
+// Star Component
+const Star = ({ delay, initialPosition }) => {
   const [position, setPosition] = useState(initialPosition)
   const [opacity, setOpacity] = useState(Math.random() * 0.5 + 0.3)
 
@@ -42,7 +43,8 @@ const Star = ({ delay, initialPosition }: { delay: number; initialPosition: { x:
   )
 }
 
-const TypewriterText = ({ text, color }: { text: string; color: string }) => {
+// TypewriterText Component
+const TypewriterText = ({ text, color }) => {
   const [displayText, setDisplayText] = useState('')
 
   useEffect(() => {
@@ -66,9 +68,10 @@ const TypewriterText = ({ text, color }: { text: string; color: string }) => {
   )
 }
 
+// Main 404 Component
 export default function NotFound() {
   const [errorCode, setErrorCode] = useState("404")
-  const [stars, setStars] = useState<Array<{ id: number; position: { x: number; y: number } }>>([])
+  const [stars, setStars] = useState([])
 
   useEffect(() => {
     setStars(
