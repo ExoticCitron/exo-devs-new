@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Home } from 'lucide-react'
 
-// Star Component
 const Star = ({ delay, initialPosition }) => {
   const [position, setPosition] = useState(initialPosition)
   const [opacity, setOpacity] = useState(Math.random() * 0.5 + 0.3)
@@ -26,7 +25,7 @@ const Star = ({ delay, initialPosition }) => {
       clearInterval(moveInterval)
       clearInterval(twinkleInterval)
     }
-  }, [])
+  }, [initialPosition])
 
   return (
     <div 
@@ -43,7 +42,6 @@ const Star = ({ delay, initialPosition }) => {
   )
 }
 
-// TypewriterText Component
 const TypewriterText = ({ text, color }) => {
   const [displayText, setDisplayText] = useState('')
 
@@ -68,7 +66,6 @@ const TypewriterText = ({ text, color }) => {
   )
 }
 
-// Main 404 Component
 export default function NotFound() {
   const [errorCode, setErrorCode] = useState("404")
   const [stars, setStars] = useState([])
@@ -87,10 +84,9 @@ export default function NotFound() {
 
   useEffect(() => {
     const glitchInterval = setInterval(() => {
-      const glitchedCode = "404".split('').map(char => 
-        Math.random() < 0.1 ? String.fromCharCode(Math.floor(Math.random() * 10) + 48) : char
-      ).join('')
-      setErrorCode(glitchedCode)
+      setErrorCode(prev => 
+        prev.split('').map(char => Math.random() < 0.1 ? String.fromCharCode(48 + Math.floor(Math.random() * 10)) : char).join('')
+      )
     }, 100)
 
     return () => clearInterval(glitchInterval)
@@ -138,40 +134,15 @@ export default function NotFound() {
 
       <style jsx>{`
         @keyframes glitch {
-          0% {
+          0%, 100% {
             text-shadow: 0.05em 0 0 rgba(255,0,0,0.75),
                         -0.05em -0.025em 0 rgba(0,255,0,0.75),
                         -0.025em 0.05em 0 rgba(0,0,255,0.75);
-          }
-          14% {
-            text-shadow: 0.05em 0 0 rgba(255,0,0,0.75),
-                        -0.05em -0.025em 0 rgba(0,255,0,0.75),
-                        -0.025em 0.05em 0 rgba(0,0,255,0.75);
-          }
-          15% {
-            text-shadow: -0.05em -0.025em 0 rgba(255,0,0,0.75),
-                        0.025em 0.025em 0 rgba(0,255,0,0.75),
-                        -0.05em -0.05em 0 rgba(0,0,255,0.75);
-          }
-          49% {
-            text-shadow: -0.05em -0.025em 0 rgba(255,0,0,0.75),
-                        0.025em 0.025em 0 rgba(0,255,0,0.75),
-                        -0.05em -0.05em 0 rgba(0,0,255,0.75);
           }
           50% {
-            text-shadow: 0.025em 0.05em 0 rgba(255,0,0,0.75),
-                        0.05em 0 0 rgba(0,255,0,0.75),
-                        0 -0.05em 0 rgba(0,0,255,0.75);
-          }
-          99% {
-            text-shadow: 0.025em 0.05em 0 rgba(255,0,0,0.75),
-                        0.05em 0 0 rgba(0,255,0,0.75),
-                        0 -0.05em 0 rgba(0,0,255,0.75);
-          }
-          100% {
-            text-shadow: -0.025em 0 0 rgba(255,0,0,0.75),
-                        -0.025em -0.025em 0 rgba(0,255,0,0.75),
-                        -0.025em -0.05em 0 rgba(0,0,255,0.75);
+            text-shadow: -0.05em -0.025em 0 rgba(255,0,0,0.75),
+                        0.025em 0.025em 0 rgba(0,255,0,0.75),
+                        -0.05em -0.05em 0 rgba(0,0,255,0.75);
           }
         }
 
