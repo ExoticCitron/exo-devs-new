@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Home } from 'lucide-react'
@@ -15,17 +15,17 @@ const Star = ({ delay, initialPosition }) => {
         x: (prev.x + 0.05) % 100,
         y: prev.y
       }))
-    }, 50)
+    }, 100)
 
     const twinkleInterval = setInterval(() => {
       setOpacity(Math.random() * 0.5 + 0.3)
-    }, 500)
+    }, 1000)
 
     return () => {
       clearInterval(moveInterval)
       clearInterval(twinkleInterval)
     }
-  }, [initialPosition])
+  }, [])
 
   return (
     <div 
@@ -36,7 +36,7 @@ const Star = ({ delay, initialPosition }) => {
         width: '2px',
         height: '2px',
         opacity: opacity,
-        transition: 'left 0.05s linear, opacity 0.5s ease-in-out',
+        transition: 'left 0.1s linear, opacity 1s ease-in-out',
       }}
     />
   )
@@ -70,26 +70,33 @@ export default function NotFound() {
   const [errorCode, setErrorCode] = useState("404")
   const [stars, setStars] = useState([])
 
-  useEffect(() => {
-    setStars(
-      Array.from({ length: 100 }, (_, i) => ({
-        id: i,
-        position: {
-          x: Math.random() * 100,
-          y: Math.random() * 100
-        }
-      }))
-    )
+  const generateStars = useCallback(() => {
+    return Array.from({ length: 100 }, (_, i) => ({
+      id: i,
+      position: {
+        x: Math.random() * 100,
+        y: Math.random() * 100
+      }
+    }))
   }, [])
 
   useEffect(() => {
-    const glitchInterval = setInterval(() => {
-      setErrorCode(prev => 
-        prev.split('').map(char => Math.random() < 0.1 ? String.fromCharCode(48 + Math.floor(Math.random() * 10)) : char).join('')
-      )
-    }, 100)
+    setStars(generateStars())
+  }, [generateStars])
 
-    return () => clearInterval(glitchInterval)
+  useEffect(() => {
+    let glitchInterval
+    if (typeof window !== 'undefined') {
+      glitchInterval = setInterval(() => {
+        setErrorCode(prev => 
+          prev.split('').map(char => Math.random() < 0.1 ? String.fromCharCode(48 + Math.floor(Math.random() * 10)) : char).join('')
+        )
+      }, 1000)
+    }
+
+    return () => {
+      if (glitchInterval) clearInterval(glitchInterval)
+    }
   }, [])
 
   return (
