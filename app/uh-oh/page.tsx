@@ -93,21 +93,21 @@ export default function NotFound() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden flex flex-col items-center justify-center relative">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden flex flex-col items-center justify-center relative px-4 py-8">
       {stars.map((star) => (
         <Star key={star.id} delay={star.id * 0.1} initialPosition={star.position} />
       ))}
 
-      <h1 className="text-8xl font-bold mb-8 glitch-text" data-text={errorCode}>
+      <h1 className="text-6xl sm:text-8xl font-bold mb-4 sm:mb-8 glitch-text text-center" data-text={errorCode}>
         {errorCode}
       </h1>
 
-      <p className="text-2xl mb-8 text-center max-w-md">
+      <p className="text-lg sm:text-2xl mb-6 sm:mb-8 text-center max-w-md">
         Oops! Looks like you've drifted into a <span className="text-blue-400">cosmic void</span>. 
         This sector of space is <span className="text-red-400">uncharted</span>.
       </p>
 
-      <div className="bg-gray-800 p-4 rounded-lg mb-8 w-80 font-mono">
+      <div className="bg-gray-800 p-4 rounded-lg mb-6 sm:mb-8 w-full max-w-xs sm:max-w-sm font-mono">
         <TypewriterText text="> ERROR: Page not found" color="text-green-400" />
         <TypewriterText text="> SYSTEM: Initiating return sequence" color="text-yellow-400" />
         <TypewriterText text="> STATUS: Preparing wormhole..." color="text-blue-400" />
@@ -126,7 +126,7 @@ export default function NotFound() {
         </Button>
       </Link>
 
-      <div className="absolute bottom-10 right-10 w-40 h-40">
+      <div className="absolute bottom-4 right-4 sm:bottom-10 sm:right-10 w-24 h-24 sm:w-40 sm:h-40">
         <div className="absolute inset-0 border-4 border-blue-500 rounded-full animate-ping"></div>
         <div className="absolute inset-4 border-4 border-green-500 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
         <div className="absolute inset-8 border-4 border-red-500 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
