@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Shield, Zap, BarChart, Users, Headphones, Code, Twitter, Github, MessageCircle } from 'lucide-react';
+import { Check, Shield, Zap, BarChart, Users, Headphones, Code, Twitter, Github, MessageCircle, Settings, ChevronDown } from 'lucide-react';
 
-const BackgroundBubble = ({ size, position, color }) => (
+const BackgroundBubble = ({ size, position, color }: { size: number, position: { x: string, y: string }, color: string }) => (
   <motion.div
     className={`absolute rounded-full ${color} opacity-10 blur-xl`}
     style={{
@@ -62,7 +62,7 @@ const coolTextOptions = [
   "Activating time dilation field...",
 ];
 
-const LoadingPage = ({ progress, onComplete }) => {
+const LoadingPage = ({ progress, onComplete }: { progress: number, onComplete: () => void }) => {
   const [coolText, setCoolText] = useState("");
   const [textIndex, setTextIndex] = useState(0);
 
@@ -80,7 +80,7 @@ const LoadingPage = ({ progress, onComplete }) => {
 
   useEffect(() => {
     if (progress >= 100) {
-      setTimeout(onComplete, 500);
+      setTimeout(onComplete, 300);
     }
   }, [progress, onComplete]);
 
@@ -120,7 +120,7 @@ const LoadingPage = ({ progress, onComplete }) => {
   );
 };
 
-const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }) => (
+const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }: { icon: React.ElementType, title: string, description: string, isHovered: boolean, onHover: (isHovered: boolean) => void }) => (
   <motion.div 
     className="bg-gray-800 bg-opacity-50 p-6 rounded-lg cursor-pointer relative overflow-hidden"
     onHoverStart={() => onHover(true)}
@@ -150,6 +150,69 @@ const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }) => 
   </motion.div>
 );
 
+const Header = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <header className="container mx-auto px-4 py-6 relative">
+      <div className="flex justify-center">
+        <motion.div
+          className="bg-gray-900 bg-opacity-80 rounded-full px-8 py-4 border border-blue-500 shadow-lg"
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 100, damping: 15 }}
+        >
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4">
+              <motion.div
+                className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center"
+                onHoverStart={() => setIsHovered(true)}
+                onHoverEnd={() => setIsHovered(false)}
+                animate={{ rotate: isHovered ? 360 : 0 }}
+                transition={{ duration: 2, ease: "linear", repeat: isHovered ? Infinity : 0 }}
+              >
+                <Settings className="w-6 h-6 text-blue-100" />
+              </motion.div>
+              <span className="text-2xl font-bold text-blue-300">Division</span>
+            </div>
+            <nav className="hidden md:block">
+              <ul className="flex space-x-6">
+                <li><Link href="/" className="text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
+                <li><Link href="/dashboard" className="text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
+                <li><Link href="/docs" className="text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
+                <li><Link href="/pricing" className="text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
+              </ul>
+            </nav>
+            <div className="md:hidden">
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-blue-300 focus:outline-none">
+                <ChevronDown className={`w-6 h-6 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+      {isMenuOpen && (
+        <motion.div
+          className="md:hidden bg-gray-900 py-2 mt-4 rounded-lg border border-blue-500"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+        >
+          <nav className="container mx-auto px-4">
+            <ul className="space-y-2">
+              <li><Link href="/" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
+              <li><Link href="/dashboard" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
+              <li><Link href="/docs" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
+              <li><Link href="/pricing" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
+            </ul>
+          </nav>
+        </motion.div>
+      )}
+    </header>
+  );
+};
+
 const PremiumPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
@@ -159,7 +222,7 @@ const PremiumPage: React.FC = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
     window.addEventListener('mousemove', handleMouseMove);
@@ -257,17 +320,7 @@ const PremiumPage: React.FC = () => {
       />
 
       <div className="relative z-10">
-        <header className="container mx-auto px-4 py-8">
-          <nav className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-blue-300">Division</Link>
-            <ul className="flex space-x-6">
-              <li><Link href="/" className="text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
-              <li><Link href="/dashboard" className="text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
-              <li><Link href="/docs" className="text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
-              <li><Link href="" className="text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
-            </ul>
-          </nav>
-        </header>
+        <Header />
 
         <main className="container mx-auto px-4 py-12">
           <section className="text-center mb-20">
@@ -279,6 +332,7 @@ const PremiumPage: React.FC = () => {
             >
               Division Premium Plan
             </motion.h1>
+            
             <motion.p 
               className="text-xl mb-8 text-blue-100"
               initial={{ opacity: 0, y: -20 }}
@@ -288,13 +342,13 @@ const PremiumPage: React.FC = () => {
               Unlock the full potential of your Discord server with our premium features
             </motion.p>
             <Link href="/docs" passHref legacyBehavior>
-              <motion.button 
-                className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg"
+              <motion.a 
+                className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg inline-block"
                 whileHover={{ backgroundColor: '#7289DA', scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Get Started Now
-              </motion.button>
+              </motion.a>
             </Link>
           </section>
 
@@ -318,7 +372,7 @@ const PremiumPage: React.FC = () => {
               <ul className="space-y-4">
                 {[
                   "Unlimited audio channels for 24/7 music playback",
-                  "Custom bot branding to match your server's theme",
+                  "Custom bot  branding to match your server's theme",
                   "Advanced auto-moderation with customizable rules",
                   "Exclusive premium-only commands and features",
                   "Early access to new features and updates",
@@ -397,7 +451,7 @@ const PremiumPage: React.FC = () => {
                 <h3 className="text-xl font-bold mb-4 text-blue-300">Community</h3>
                 <ul className="space-y-2">
                   <li><Link href="https://discord.gg/vRcZHQAUN8" className="text-blue-100 hover:text-blue-300 transition-colors">Discord Server</Link></li>
-                  <li><Link href="twitter.com" className="text-blue-100 hover:text-blue-300 transition-colors">Twitter</Link></li>
+                  <li><Link href="https://twitter.com" className="text-blue-100 hover:text-blue-300 transition-colors">Twitter</Link></li>
                   <li><Link href="https://github.com/ExoticCitron" className="text-blue-100 hover:text-blue-300 transition-colors">GitHub</Link></li>
                 </ul>
               </div>
