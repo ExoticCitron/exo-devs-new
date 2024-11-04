@@ -269,14 +269,14 @@ Message: ${message}`,
 
   return (
     <motion.form 
-      className="bg-red-950 bg-opacity-60 p-8 rounded-2xl shadow-lg relative overflow-hidden"
+      className="relative bg-red-950 bg-opacity-60 p-8 rounded-2xl shadow-lg overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       onSubmit={handleSubmit}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-red-900 to-transparent opacity-20 rounded-2xl"></div>
-      <div className="mb-4">
+      <div className="absolute inset-0 bg-gradient-to-br from-red-900 to-transparent opacity-20 rounded-2xl pointer-events-none"></div>
+      <div className="relative mb-4 z-10">
         <label htmlFor="name" className="block text-red-300 mb-2">Name</label>
         <input 
           type="text" 
@@ -287,7 +287,7 @@ Message: ${message}`,
           required
         />
       </div>
-      <div className="mb-4">
+      <div className="relative mb-4 z-10">
         <label htmlFor="email" className="block text-red-300 mb-2">Email</label>
         <input 
           type="email" 
@@ -298,7 +298,7 @@ Message: ${message}`,
           required
         />
       </div>
-      <div className="mb-4">
+      <div className="relative mb-4 z-10">
         <label htmlFor="message" className="block text-red-300 mb-2">Message</label>
         <textarea 
           id="message" 
@@ -323,6 +323,7 @@ Message: ${message}`,
     </motion.form>
   );
 };
+
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
