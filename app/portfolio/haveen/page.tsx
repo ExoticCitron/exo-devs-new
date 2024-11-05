@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { User, Briefcase, Mail, Github, Linkedin, Twitter, ChevronDown, Code, Zap, Star, ChevronUp } from 'lucide-react';
+import { User, Briefcase, Mail, Github, Linkedin, Twitter, ChevronDown, Code, Zap, Star, ChevronUp, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const GlitchText = ({ text }: { text: string }) => {
   const [isGlitching, setIsGlitching] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsGlitching(false), 3000);
+    const timer = setTimeout(() => setIsGlitching(false), 10000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -36,7 +36,7 @@ const GlitchText = ({ text }: { text: string }) => {
             }}
             transition={{
               duration: 0.5,
-              repeat: 5,
+              repeat: 20,
               repeatType: 'reverse',
             }}
           >
@@ -68,6 +68,66 @@ const BackgroundBubble = ({ size, position, color }: { size: number, position: {
     }}
   />
 );
+
+const ParticleBackground = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const particles: { x: number; y: number; size: number; speedX: number; speedY: number }[] = [];
+    const particleCount = 100;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 1,
+        speedX: Math.random() * 0.5 - 0.25,
+        speedY: Math.random() * 0.5 - 0.25
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle) => {
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+
+        if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none" />;
+};
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -188,16 +248,16 @@ const Section = ({ id, title, children }: { id: string, title: string, children:
 
 const ProjectCard = ({ title, description, link, icon: Icon }: { title: string, description: string, link: string, icon: React.ElementType }) => (
   <motion.div 
-    className="bg-gradient-to-br from-red-950 to-red-900 bg-opacity-60 p-6 rounded-2xl shadow-lg relative overflow-hidden"
+    className="bg-gradient-to-br from-red-950 to-red-900 bg-opacity-60 p-6 rounded-2xl shadow-lg relative overflow-hidden group"
     whileHover={{ scale: 1.05 }}
   >
     <div className="absolute top-0 right-0 w-20 h-20 bg-red-800 rounded-bl-full opacity-20"></div>
     <Icon className="w-12 h-12 text-red-400 mb-4" />
     <h3 className="text-xl font-bold mb-2 text-red-300">{title}</h3>
     <p className="text-red-100 mb-4">{description}</p>
-    <a href={link} className="text-red-400 hover:text-red-300 transition-colors inline-flex items-center">
+    <a href={link} className="text-red-400 hover:text-red-300 transition-colors inline-flex items-center group-hover:underline">
       Learn More
-      <ChevronDown className="w-4 h-4 ml-1 transform rotate-270" />
+      <ArrowRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
     </a>
   </motion.div>
 );
@@ -208,8 +268,13 @@ const Skill = ({ name, level }: { name: string, level: number }) => (
       <span className="text-red-300">{name}</span>
       <span className="text-red-400">{level}%</span>
     </div>
-    <div className="w-full bg-red-900 rounded-full h-2.5">
-      <div className="bg-red-500 h-2.5 rounded-full" style={{ width: `${level}%` }}></div>
+    <div className="w-full bg-red-900 rounded-full h-2.5 overflow-hidden">
+      <motion.div 
+        className="bg-red-500 h-2.5 rounded-full"
+        initial={{ width: 0 }}
+        animate={{ width: `${level}%` }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      />
     </div>
   </div>
 );
@@ -294,7 +359,7 @@ Message: ${message}`,
           id="email" 
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-3 py-2 bg-red-900 bg-opacity-50 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500" 
+          className="w-full  px-3 py-2 bg-red-900 bg-opacity-50 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500" 
           required
         />
       </div>
@@ -324,7 +389,6 @@ Message: ${message}`,
   );
 };
 
-
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { scrollY } = useScroll();
@@ -349,7 +413,7 @@ const ScrollToTopButton = () => {
         <motion.button
           className="fixed bottom-4 right-4 bg-red-600 text-white p-2 rounded-full shadow-lg z-50"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0  }}
+          animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           onClick={scrollToTop}
           whileHover={{ scale: 1.1 }}
@@ -377,6 +441,7 @@ export default function PortfolioWebsite() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-red-950 to-red-900 text-white overflow-hidden relative">
+      <ParticleBackground />
       <BackgroundBubble size={300} position={{ x: '10%', y: '20%' }} color="bg-red-800" />
       <BackgroundBubble size={200} position={{ x: '80%', y: '50%' }} color="bg-red-700" />
       <BackgroundBubble size={150} position={{ x: '50%', y: '70%' }} color="bg-red-600" />
@@ -444,12 +509,12 @@ export default function PortfolioWebsite() {
           <Section id="about-me" title="About Me">
             <div className="max-w-4xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-red-950 bg-opacity-40 p-6  rounded-2xl">
+                <div className="bg-red-950 bg-opacity-40 p-6 rounded-2xl">
                   <p className="text-lg mb-6 text-red-100">
-                    I'm a passionate web developer with a keen eye for design and a love for creating intuitive, user-friendly experiences. I'm 16 and expertise in React, Next.js, HTML and Python, and more importantly, I love to bring ideas to life through code.
+                    I'm a passionate web developer with a keen eye for design and a love for creating intuitive, user-friendly experiences. I'm 16 and have expertise in React, Next.js, HTML and Python, and more importantly, I love to bring ideas to life through code.
                   </p>
                   <p className="text-lg mb-6 text-red-100">
-                    When I'm not coding, you can find me exploring new technologies, at school,  contributing to open-source projects, or enjoying a good cup of coffee while brainstorming my next 5 big moves.
+                    When I'm not coding, you can find me exploring new technologies, at school, contributing to open-source projects, or enjoying a good cup of coffee while brainstorming my next 5 big moves.
                   </p>
                 </div>
                 <div className="bg-red-950 bg-opacity-40 p-6 rounded-2xl">
@@ -467,7 +532,7 @@ export default function PortfolioWebsite() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <ProjectCard 
                 title="Division"
-                description="An innovative discord we application built with Python and SQLite database, showcasing AI-powered security features and seamless antinuke controls. In other words... the best security bot on discord"
+                description="An innovative discord web application built with Python and SQLite database, showcasing AI-powered security features and seamless antinuke controls. In other words... the best security bot on discord"
                 link="https://exo-devs.tech/"
                 icon={Code}
               />
