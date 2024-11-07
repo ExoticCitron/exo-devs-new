@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { User, Briefcase, Mail, Github, Linkedin, Twitter, ChevronDown, Code, Zap, Star, ChevronUp, ArrowRight } from 'lucide-react';
+import { User, Briefcase, Mail, Github, Linkedin, Twitter, ChevronDown, Code, Zap, Star, ChevronUp, ArrowRight, ChevronLeft, ChevronRight, Cpu, Globe, Palette } from 'lucide-react';
 import Link from 'next/link';
 
 const GlitchText = ({ text }: { text: string }) => {
@@ -37,7 +37,7 @@ const GlitchText = ({ text }: { text: string }) => {
             transition={{
               duration: 0.5,
               repeat: 20,
-              repeatType: 'reverse',
+              repeatType: "reverse",
             }}
           >
             {text}
@@ -175,7 +175,7 @@ const Header = () => {
             </div>
             <nav className="hidden md:block">
               <ul className="flex space-x-6">
-                {['Home', 'About Me', 'Projects', 'Contact'].map((item) => (
+                {['Home', 'About Me', 'Projects', 'Skills', 'Contact'].map((item) => (
                   <li key={item}>
                     <motion.button
                       className="text-red-200 hover:text-white transition-colors relative"
@@ -218,7 +218,7 @@ const Header = () => {
         >
           <nav className="container mx-auto px-4">
             <ul className="space-y-2">
-              {['Home', 'About Me', 'Projects', 'Contact'].map((item) => (
+              {['Home', 'About Me', 'Projects', 'Skills', 'Contact'].map((item) => (
                 <li key={item}>
                   <button
                     onClick={() => {
@@ -239,16 +239,32 @@ const Header = () => {
   );
 };
 
-const Section = ({ id, title, children }: { id: string, title: string, children: React.ReactNode }) => (
-  <section id={id} className="py-20 relative">
-    <h2 className="text-4xl font-bold text-center mb-12 text-red-300">{title}</h2>
-    {children}
-  </section>
-);
+const Section = ({ id, title, children }: { id: string, title: string, children: React.ReactNode }) => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1]);
+
+  return (
+    <motion.section 
+      id={id} 
+      className="py-20 relative"
+      ref={ref}
+      style={{ opacity, scale }}
+    >
+      <h2 className="text-4xl font-bold text-center mb-12 text-red-300">{title}</h2>
+      {children}
+    </motion.section>
+  );
+};
 
 const ProjectCard = ({ title, description, link, icon: Icon }: { title: string, description: string, link: string, icon: React.ElementType }) => (
   <motion.div 
-    className="bg-gradient-to-br from-red-950 to-red-900 bg-opacity-60 p-6 rounded-2xl shadow-lg relative overflow-hidden group"
+    className="bg-gradient-to-br from-red-950 to-red-900 bg-opacity-60 p-6 rounded-2xl shadow-lg relative overflow-hidden group transform transition-all duration-300 hover:-rotate-3 hover:scale-105"
     whileHover={{ scale: 1.05 }}
   >
     <div className="absolute top-0 right-0 w-20 h-20 bg-red-800 rounded-bl-full opacity-20"></div>
@@ -262,22 +278,48 @@ const ProjectCard = ({ title, description, link, icon: Icon }: { title: string, 
   </motion.div>
 );
 
-const Skill = ({ name, level }: { name: string, level: number }) => (
-  <div className="mb-4">
-    <div className="flex justify-between mb-1">
-      <span className="text-red-300">{name}</span>
-      <span className="text-red-400">{level}%</span>
+const Skill = ({ name, level }: { name: string, level: number }) => {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="mb-4" ref={ref}>
+      <div className="flex justify-between mb-1">
+        <span className="text-red-300">{name}</span>
+        <span className="text-red-400">{level}%</span>
+      </div>
+      <div className="w-full bg-red-900 rounded-full h-2.5 overflow-hidden">
+        <motion.div 
+          className="bg-red-500 h-2.5 rounded-full"
+          initial={{ width: 0 }}
+          animate={{ width: isInView ? `${level}%` : 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        />
+      </div>
     </div>
-    <div className="w-full bg-red-900 rounded-full h-2.5 overflow-hidden">
-      <motion.div 
-        className="bg-red-500 h-2.5 rounded-full"
-        initial={{ width: 0 }}
-        animate={{ width: `${level}%` }}
-        transition={{ duration: 1, ease: "easeOut" }}
-      />
-    </div>
-  </div>
-);
+  );
+};
 
 const ContactForm = () => {
   const [name, setName] = useState('');
@@ -342,37 +384,55 @@ Message: ${message}`,
     >
       <div className="absolute inset-0 bg-gradient-to-br from-red-900 to-transparent opacity-20 rounded-2xl pointer-events-none"></div>
       <div className="relative mb-4 z-10">
-        <label htmlFor="name" className="block text-red-300 mb-2">Name</label>
         <input 
           type="text" 
           id="name" 
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full px-3 py-2 bg-red-900 bg-opacity-50 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500" 
+          className="w-full px-3 py-2 bg-red-900 bg-opacity-50 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500 peer placeholder-transparent" 
+          placeholder="Name"
           required
         />
+        <label 
+          htmlFor="name" 
+          className="absolute left-3 -top-2.5 text-red-300 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-red-400 peer-placeholder-shown:top-2 peer-focus:-top-2.5 peer-focus:text-red-300 peer-focus:text-sm"
+        >
+          Name
+        </label>
       </div>
       <div className="relative mb-4 z-10">
-        <label htmlFor="email" className="block text-red-300 mb-2">Email</label>
         <input 
           type="email" 
           id="email" 
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full  px-3 py-2 bg-red-900 bg-opacity-50 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500" 
+          className="w-full px-3 py-2 bg-red-900 bg-opacity-50 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500 peer placeholder-transparent" 
+          placeholder="Email"
           required
         />
+        <label 
+          htmlFor="email" 
+          className="absolute left-3 -top-2.5 text-red-300 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-red-400 peer-placeholder-shown:top-2 peer-focus:-top-2.5 peer-focus:text-red-300 peer-focus:text-sm"
+        >
+          Email
+        </label>
       </div>
       <div className="relative mb-4 z-10">
-        <label htmlFor="message" className="block text-red-300 mb-2">Message</label>
         <textarea 
           id="message" 
           rows={4} 
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full px-3 py-2 bg-red-900 bg-opacity-50 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 bg-red-900 bg-opacity-50 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-500 peer placeholder-transparent"
+          placeholder="Message"
           required
         ></textarea>
+        <label 
+          htmlFor="message" 
+          className="absolute left-3 -top-2.5 text-red-300 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-red-400 peer-placeholder-shown:top-2 peer-focus:-top-2.5 peer-focus:text-red-300 peer-focus:text-sm"
+        >
+          Message
+        </label>
       </div>
       <motion.button 
         type="submit"
@@ -423,6 +483,80 @@ const ScrollToTopButton = () => {
         </motion.button>
       )}
     </AnimatePresence>
+  );
+};
+
+const TestimonialCarousel = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const testimonials = [
+    { name: "Evan Jaden", role: "CEO, [REDACTED]", text: "Haveen's work is exceptional. His attention to detail and creative solutions have greatly improved our web presence." },
+    { name: "Leo Olanti", role: "Client For Software Solutions", text: "Working with Haveen was a pleasure. He delivered our project on time and exceeded our expectations." },
+    { name: "Incog [CLIENT NAME REDACTED]", role: "Founder Of A Discord Hostings Website", text: "Haveen's expertise in web development helped us launch our hosting solutions successfully. Highly recommended!" },
+  ];
+
+  const nextTestimonial = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
+  };
+
+  return (
+    <div className="relative bg-red-950 bg-opacity-60 p-8 rounded-2xl shadow-lg overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-red-900 to-transparent opacity-20 rounded-2xl pointer-events-none"></div>
+      <div className="relative z-10">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            <p className="text-lg mb-4 text-red-100">"{testimonials[currentIndex].text}"</p>
+            <p className="font-bold text-red-300">{testimonials[currentIndex].name}</p>
+            <p className="text-sm text-red-400">{testimonials[currentIndex].role}</p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className="flex justify-between mt-4">
+        <button onClick={prevTestimonial} className="text-red-400 hover:text-red-300 transition-colors">
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button onClick={nextTestimonial} className="text-red-400 hover:text-red-300 transition-colors">
+          <ChevronRight className="w-6 h-6" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const SkillCard = ({ skill, icon: Icon }: { skill: string, icon: React.ElementType }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      className="bg-gradient-to-br from-red-950 to-red-900 p-6 rounded-2xl shadow-lg relative overflow-hidden cursor-pointer"
+      whileHover={{ scale: 1.05 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+    >
+      <motion.div
+        className="absolute inset-0 bg-red-800 opacity-0"
+        initial={false}
+        animate={{ opacity: isHovered ? 0.2 : 0 }}
+      />
+      <Icon className="w-12 h-12 text-red-400 mb-4" />
+      <h3 className="text-xl font-bold text-red-300">{skill}</h3>
+      <motion.div
+        className="w-full h-1 bg-red-500 mt-4"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+      />
+    </motion.div>
   );
 };
 
@@ -551,6 +685,23 @@ export default function PortfolioWebsite() {
             </div>
           </Section>
 
+          <Section id="testimonials" title="What People Say">
+            <div className="max-w-2xl mx-auto">
+              <TestimonialCarousel />
+            </div>
+          </Section>
+
+          <Section id="skills" title="Skills Showcase">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <SkillCard skill="Frontend Development" icon={Code} />
+              <SkillCard skill="Backend Development" icon={Cpu} />
+              <SkillCard skill="UI/UX Design" icon={Palette} />
+              <SkillCard skill="Responsive Design" icon={Globe} />
+              <SkillCard skill="API Integration" icon={Zap} />
+              <SkillCard skill="Performance Optimization" icon={Star} />
+            </div>
+          </Section>
+
           <Section id="contact" title="Get in Touch">
             <div className="max-w-md mx-auto">
               <ContactForm />
@@ -562,7 +713,7 @@ export default function PortfolioWebsite() {
           <div className="container mx-auto px-4 text-center">
             <p className="text-red-300 mb-4">&copy; 2024 Haveen. All rights reserved.</p>
             <div className="flex justify-center space-x-4">
-              <a href="#" className="text-red-400 hover:text-red-300 transition-colors">
+              <a href="https://github.com/ExoticCitron" className="text-red-400 hover:text-red-300 transition-colors">
                 <Github className="w-6 h-6" />
               </a>
               <a href="#" className="text-red-400 hover:text-red-300 transition-colors">
