@@ -54,72 +54,6 @@ const SparkleEffect = () => (
   </div>
 );
 
-const coolTextOptions = [
-  "Initializing virtual reality...",
-  "Decrypting alien transmissions...",
-  "Generating holographic interface...",
-  "Compiling futuristic code...",
-  "Activating time dilation field...",
-];
-
-const LoadingPage = ({ progress, onComplete }: { progress: number, onComplete: () => void }) => {
-  const [coolText, setCoolText] = useState("");
-  const [textIndex, setTextIndex] = useState(0);
-
-  useEffect(() => {
-    const textInterval = setInterval(() => {
-      setTextIndex((prevIndex) => (prevIndex + 1) % coolTextOptions.length);
-    }, 2000);
-
-    return () => clearInterval(textInterval);
-  }, []);
-
-  useEffect(() => {
-    setCoolText(coolTextOptions[textIndex]);
-  }, [textIndex]);
-
-  useEffect(() => {
-    if (progress >= 100) {
-      setTimeout(onComplete, 300);
-    }
-  }, [progress, onComplete]);
-
-  return (
-    <div className="fixed inset-0 bg-gray-950 flex flex-col items-center justify-center z-50">
-      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Initializing Division Premium</h1>
-      <div className="w-64 h-4 bg-gray-800 rounded-full overflow-hidden relative">
-        <motion.div
-          className="h-full bg-blue-500"
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.5 }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-full h-full bg-blue-400 opacity-50 blur-md" 
-               style={{clipPath: `inset(0 ${100 - progress}% 0 0)`}} />
-        </div>
-        <SparkleEffect />
-      </div>
-      <div className="mt-4 text-xl text-blue-300 font-mono">
-        {progress.toFixed(0)}%
-      </div>
-      <div className="mt-8 text-blue-200 text-sm font-mono h-6">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={coolText}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-          >
-            {coolText}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </div>
-  );
-};
-
 const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }: { icon: React.ElementType, title: string, description: string, isHovered: boolean, onHover: (isHovered: boolean) => void }) => (
   <motion.div 
     className="bg-gray-800 bg-opacity-50 p-6 rounded-lg cursor-pointer relative overflow-hidden"
@@ -137,7 +71,7 @@ const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }: { i
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0 }}
+          transition={{ duration: 0.2 }}
           style={{
             boxShadow: '0 0 10px #7289DA, 0 0 20px #7289DA, 0 0 30px #7289DA, 0 0 40px #7289DA',
           }}
@@ -155,13 +89,18 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="container mx-auto px-4 py-6 relative">
+    <motion.header 
+      className="container mx-auto px-4 py-6 relative"
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
       <div className="flex justify-center">
         <motion.div
           className="bg-gray-900 bg-opacity-80 rounded-full px-8 py-4 border border-blue-500 shadow-lg"
-          initial={{ y: -100, opacity: 0 }}
+          initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 100, damping: 15 }}
+          transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.4 }}
         >
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-4">
@@ -192,24 +131,27 @@ const Header = () => {
           </div>
         </motion.div>
       </div>
-      {isMenuOpen && (
-        <motion.div
-          className="md:hidden bg-gray-900 py-2 mt-4 rounded-lg border border-blue-500"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-        >
-          <nav className="container mx-auto px-4">
-            <ul className="space-y-2">
-              <li><Link href="/" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
-              <li><Link href="/dashboard" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
-              <li><Link href="/docs" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
-              <li><Link href="/pricing" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
-            </ul>
-          </nav>
-        </motion.div>
-      )}
-    </header>
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="md:hidden bg-gray-900 py-2 mt-4 rounded-lg border border-blue-500"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <nav className="container mx-auto px-4">
+              <ul className="space-y-2">
+                <li><Link href="/" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
+                <li><Link href="/dashboard" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
+                <li><Link href="/docs" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
+                <li><Link href="/pricing" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
+              </ul>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 };
 
@@ -218,8 +160,6 @@ const PremiumPage: React.FC = () => {
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [loadingProgress, setLoadingProgress] = useState(0);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -227,19 +167,8 @@ const PremiumPage: React.FC = () => {
     };
     window.addEventListener('mousemove', handleMouseMove);
 
-    const interval = setInterval(() => {
-      setLoadingProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + Math.random() * 5;
-      });
-    }, 100);
-
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      clearInterval(interval);
     };
   }, []);
 
@@ -299,10 +228,6 @@ const PremiumPage: React.FC = () => {
     }
   };
 
-  if (loading) {
-    return <LoadingPage progress={loadingProgress} onComplete={() => setLoading(false)} />;
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white overflow-hidden relative">
       <BackgroundBubble size={300} position={{ x: '10%', y: '20%' }} color="bg-blue-900" />
@@ -323,21 +248,26 @@ const PremiumPage: React.FC = () => {
         <Header />
 
         <main className="container mx-auto px-4 py-12">
-          <section className="text-center mb-20">
+          <motion.section 
+            className="text-center mb-20"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
             <motion.h1 
               className="text-5xl font-bold mb-6 text-blue-300"
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
             >
               Division Premium Plan
             </motion.h1>
             
             <motion.p 
               className="text-xl mb-8 text-blue-100"
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
             >
               Unlock the full potential of your Discord server with our premium features
             </motion.p>
@@ -346,33 +276,52 @@ const PremiumPage: React.FC = () => {
                 className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg inline-block"
                 whileHover={{ backgroundColor: '#7289DA', scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1 }}
               >
                 Get Started Now
               </motion.a>
             </Link>
-          </section>
+          </motion.section>
 
-          <section className="mb-20">
+          <motion.section 
+            className="mb-20"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
             <h2 className="text-3xl font-bold text-center mb-12 text-blue-300">Premium Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {features.map((feature, index) => (
-                <FeatureCard 
-                  key={index} 
-                  {...feature} 
-                  isHovered={activeFeature === index}
-                  onHover={(isHovered) => setActiveFeature(isHovered ? index : null)}
-                />
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 * index }}
+                >
+                  <FeatureCard 
+                    {...feature} 
+                    isHovered={activeFeature === index}
+                    onHover={(isHovered) => setActiveFeature(isHovered ? index : null)}
+                  />
+                </motion.div>
               ))}
             </div>
-          </section>
+          </motion.section>
 
-          <section className="mb-20">
+          <motion.section 
+            className="mb-20"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
             <h2 className="text-3xl font-bold text-center mb-12 text-blue-300">Why Choose Premium?</h2>
             <div className="bg-gray-800 bg-opacity-50 p-8 rounded-lg">
               <ul className="space-y-4">
                 {[
                   "Unlimited audio channels for 24/7 music playback",
-                  "Custom bot  branding to match your server's theme",
+                  "Custom bot branding to match your server's theme",
                   "Advanced auto-moderation with customizable rules",
                   "Exclusive premium-only commands and features",
                   "Early access to new features and updates",
@@ -380,16 +329,27 @@ const PremiumPage: React.FC = () => {
                   "Premium support with guaranteed response times",
                   "Regular feature updates based on community feedback"
                 ].map((benefit, index) => (
-                  <li key={index} className="flex items-start">
+                  <motion.li 
+                    key={index} 
+                    className="flex items-start"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 * index }}
+                  >
                     <Check className="w-6 h-6 mr-2 text-blue-400 flex-shrink-0" />
                     <span className="text-blue-100">{benefit}</span>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </div>
-          </section>
+          </motion.section>
 
-          <section className="text-center mb-20">
+          <motion.section 
+            className="text-center mb-20"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1 }}
+          >
             <h2 className="text-3xl font-bold mb-6 text-blue-300">Ready to Upgrade?</h2>
             <p className="text-xl mb-8 text-blue-100">Join thousands of servers already enjoying Division Premium</p>
             <motion.button 
@@ -399,9 +359,14 @@ const PremiumPage: React.FC = () => {
             >
               Upgrade to Premium
             </motion.button>
-          </section>
+          </motion.section>
 
-          <section className="mb-20">
+          <motion.section 
+            className="mb-20"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.2 }}
+          >
             <h2 className="text-3xl font-bold text-center mb-12 text-blue-300">Frequently Asked Questions</h2>
             <div className="space-y-6">
               {[
@@ -422,16 +387,27 @@ const PremiumPage: React.FC = () => {
                   answer: "Yes, we offer special pricing for verified non-profit and educational institutions. Please contact our support team for more information."
                 }
               ].map((faq, index) => (
-                <div key={index} className="bg-gray-800 bg-opacity-50 p-6 rounded-lg">
+                <motion.div 
+                  key={index} 
+                  className="bg-gray-800 bg-opacity-50 p-6 rounded-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 * index }}
+                >
                   <h3 className="text-xl font-bold mb-2 text-blue-300">{faq.question}</h3>
                   <p className="text-blue-100">{faq.answer}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </section>
+          </motion.section>
         </main>
 
-        <footer className="bg-gray-900 py-12 relative z-10">
+        <motion.footer 
+          className="bg-gray-900 py-12 relative z-10"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.4 }}
+        >
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
               <div>
@@ -495,7 +471,7 @@ const PremiumPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </footer>
+        </motion.footer>
       </div>
     </div>
   );
