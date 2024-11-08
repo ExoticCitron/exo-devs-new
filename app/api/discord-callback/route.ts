@@ -8,20 +8,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No code provided' }, { status: 400 })
     }
 
-    // Exchange the code for an access token
-    const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
+    console.log('Received code:', code)
+
+    const tokenUrl = 'https://discord.com/api/oauth2/token'
+    const body = new URLSearchParams({
+      client_id: process.env.DISCORD_CLIENT_ID!,
+      client_secret: process.env.DISCORD_CLIENT_SECRET!,
+      grant_type: 'authorization_code',
+      code: code,
+      redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/verification`,
+      scope: 'identify email guilds.join',
+    })
+
+    console.log('Token request body:', body.toString())
+
+    const tokenResponse = await fetch(tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams({
-        client_id: process.env.DISCORD_CLIENT_ID!,
-        client_secret: process.env.DISCORD_CLIENT_SECRET!,
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/verification`,
-      }),
+      body: body,
     })
+
+    console.log('Token response status:', tokenResponse.status)
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.text()
@@ -30,8 +39,8 @@ export async function POST(req: Request) {
     }
 
     const tokenData = await tokenResponse.json()
+    console.log('Token data received:', JSON.stringify(tokenData, null, 2))
 
-    // Use the access token to get user information
     const userResponse = await fetch('https://discord.com/api/users/@me', {
       headers: {
         Authorization: `Bearer ${tokenData.access_token}`,
@@ -45,9 +54,8 @@ export async function POST(req: Request) {
     }
 
     const userData = await userResponse.json()
+    console.log('User data received:', JSON.stringify(userData, null, 2))
 
-    // Here you would typically save the user data to your database
-    // For now, we'll just return it
     return NextResponse.json(userData)
   } catch (error) {
     console.error('Discord callback error:', error)
