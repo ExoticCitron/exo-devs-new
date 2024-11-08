@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import { ChevronDown, Zap, Shield, Music, Gift, Settings, Users, Star, Twitter, Github, MessageCircle } from 'lucide-react';
 
 const BackgroundBubble = ({ size, position, color }: { size: number, position: { x: string, y: string }, color: string }) => (
@@ -72,7 +72,7 @@ const LoadingPage = ({ progress, onComplete }: { progress: number, onComplete: (
   useEffect(() => {
     const textInterval = setInterval(() => {
       setTextIndex((prevIndex) => (prevIndex + 1) % coolTextOptions.length);
-    }, 2000);
+    }, 1500); // Changed from 1000ms to 1500ms for slightly slower text changes
 
     return () => clearInterval(textInterval);
   }, []);
@@ -83,7 +83,7 @@ const LoadingPage = ({ progress, onComplete }: { progress: number, onComplete: (
 
   useEffect(() => {
     if (progress >= 100) {
-      setTimeout(onComplete, 500);
+      setTimeout(onComplete, 400); // Changed from 300ms to 400ms
     }
   }, [progress, onComplete]);
 
@@ -95,7 +95,7 @@ const LoadingPage = ({ progress, onComplete }: { progress: number, onComplete: (
           className="h-full bg-blue-500"
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }} // Changed from 0.3s to 0.4s
         />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-full h-full bg-blue-400 opacity-50 blur-md" 
@@ -113,7 +113,7 @@ const LoadingPage = ({ progress, onComplete }: { progress: number, onComplete: (
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }} // Changed from 0.3s to 0.4s
           >
             {coolText}
           </motion.div>
@@ -156,15 +156,34 @@ const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }: { i
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [scrollY, setScrollY] = useState(0);
+  const { scrollY: scrollYProgress } = useScroll();
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setScrollY(latest);
+  });
+
+  const headerOpacity = useTransform(scrollYProgress, [0, 200], [1, 0.8]);
+  const headerBlur = useTransform(scrollYProgress, [0, 200], [0, 8]);
 
   return (
-    <header className="container mx-auto px-4 py-6 relative">
+    <motion.header 
+      className="container mx-auto px-4 py-6 relative"
+      style={{ 
+        opacity: headerOpacity,
+        filter: `blur(${headerBlur}px)`,
+      }}
+    >
       <div className="flex justify-center">
         <motion.div
-          className="bg-gray-900 bg-opacity-80 rounded-full px-8 py-4 border border-blue-500 shadow-lg"
+          className="bg-gray-900 bg-opacity-70 backdrop-blur-md rounded-full px-8 py-4 shadow-lg relative"
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 100, damping: 15 }}
+          style={{
+            boxShadow: '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(0, 255, 255, 0.2)',
+          }}
         >
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-4">
@@ -181,10 +200,31 @@ const Header = () => {
             </div>
             <nav className="hidden md:block">
               <ul className="flex space-x-6">
-                <li><Link href="/" className="text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
-                <li><Link href="/dashboard" className="text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
-                <li><Link href="/docs" className="text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
-                <li><Link href="/pricing" className="text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
+                {['Home', 'Dashboard', 'Docs', 'Pricing'].map((item) => (
+                  <li key={item}>
+                    <Link href={item === 'Home' ? '/' : `/${item.toLowerCase()}`} passHref legacyBehavior>
+                      <motion.a
+                        className="text-blue-200 hover:text-white transition-colors relative"
+                        onHoverStart={() => setHoveredItem(item)}
+                        onHoverEnd={() => setHoveredItem(null)}
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        {item}
+                        <AnimatePresence>
+                          {hoveredItem === item && (
+                            <motion.div
+                              className="absolute inset-0 bg-cyan-400 opacity-20 rounded-full"
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              exit={{ scale: 0 }}
+                              transition={{ duration: 0.2 }}
+                            />
+                          )}
+                        </AnimatePresence>
+                      </motion.a>
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </nav>
             <div className="md:hidden">
@@ -212,7 +252,7 @@ const Header = () => {
           </nav>
         </motion.div>
       )}
-    </header>
+    </motion.header>
   );
 };
 
@@ -236,9 +276,9 @@ export default function DiscordBotLanding() {
           clearInterval(interval);
           return 100;
         }
-        return prev + Math.random() * 5;
+        return prev + Math.random() * 7; // Changed from 10 to 7 for slightly slower progress
       });
-    }, 100);
+    }, 75); // Changed from 50ms to 75ms for slightly slower updates
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -315,7 +355,6 @@ export default function DiscordBotLanding() {
               Meet Division: Your Discord Sidekick
             </motion.h1>
             <motion.p 
-               
               className="text-xl mb-8 text-blue-100"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -325,11 +364,11 @@ export default function DiscordBotLanding() {
             </motion.p>
             <Link href="https://discord.com/oauth2/authorize?client_id=1175862600127500388&permissions=8&integration_type=0&scope=bot+applications.commands" passHref legacyBehavior>
               <motion.a 
-                  className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg inline-block"
-                  whileHover={{ backgroundColor: '#7289DA', scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Add to Discord
+                className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg inline-block"
+                whileHover={{ backgroundColor: '#7289DA', scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Add to Discord
               </motion.a>
             </Link>
           </section>
@@ -352,11 +391,11 @@ export default function DiscordBotLanding() {
             <p className="text-xl mb-8 text-blue-100">Join thousands of servers already using Division</p>
             <Link href="https://discord.com/oauth2/authorize?client_id=1175862600127500388&permissions=8&integration_type=0&scope=bot+applications.commands" passHref legacyBehavior>
               <motion.a 
-                  className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg inline-block"
-                  whileHover={{ backgroundColor: '#7289DA', scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Add Division Now
+                className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg inline-block"
+                whileHover={{ backgroundColor: '#7289DA', scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Add Division Now
               </motion.a>
             </Link>
           </section>
