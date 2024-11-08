@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Smile, Music, Shield, Settings, HelpCircle, ChevronDown } from 'lucide-react';
 
-const BackgroundBubble = ({ size, position, color }) => (
+const BackgroundBubble = ({ size, position, color }: { size: number, position: { x: string, y: string }, color: string }) => (
   <motion.div
     className={`absolute rounded-full ${color} opacity-10 blur-xl`}
     style={{
@@ -54,72 +54,6 @@ const SparkleEffect = () => (
   </div>
 );
 
-const coolTextOptions = [
-  "Compiling documentation...",
-  "Indexing commands...",
-  "Organizing categories...",
-  "Preparing examples...",
-  "Loading usage tips...",
-];
-
-const LoadingPage = ({ progress, onComplete }) => {
-  const [coolText, setCoolText] = useState("");
-  const [textIndex, setTextIndex] = useState(0);
-
-  useEffect(() => {
-    const textInterval = setInterval(() => {
-      setTextIndex((prevIndex) => (prevIndex + 1) % coolTextOptions.length);
-    }, 1500);
-
-    return () => clearInterval(textInterval);
-  }, []);
-
-  useEffect(() => {
-    setCoolText(coolTextOptions[textIndex]);
-  }, [textIndex]);
-
-  useEffect(() => {
-    if (progress >= 100) {
-      setTimeout(onComplete, 300);
-    }
-  }, [progress, onComplete]);
-
-  return (
-    <div className="fixed inset-0 bg-gray-950 flex flex-col items-center justify-center z-50">
-      <h1 className="text-4xl font-bold mb-8 text-blue-300 font-mono">Loading Division Docs</h1>
-      <div className="w-64 h-4 bg-gray-800 rounded-full overflow-hidden relative">
-        <motion.div
-          className="h-full bg-blue-500"
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.3 }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-full h-full bg-blue-400 opacity-50 blur-md" 
-               style={{clipPath: `inset(0 ${100 - progress}% 0 0)`}} />
-        </div>
-        <SparkleEffect />
-      </div>
-      <div className="mt-4 text-xl text-blue-300 font-mono">
-        {progress.toFixed(0)}%
-      </div>
-      <div className="mt-8 text-blue-200 text-sm font-mono h-6">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={coolText}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-          >
-            {coolText}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </div>
-  );
-};
-
 const commands = [
   { name: 'Trivia', description: 'Start a trivia game in your server', category: 'Fun' },
   { name: 'Joke', description: 'Get a random joke', category: 'Fun' },
@@ -136,7 +70,7 @@ const commands = [
   { name: 'Data Removal', description: 'Request data removal', category: 'FAQs'},
 ];
 
-const filterCommands = (query, category) => {
+const filterCommands = (query: string, category: string) => {
   return commands.filter(
     (command) =>
       command.category === category &&
@@ -144,8 +78,13 @@ const filterCommands = (query, category) => {
   );
 };
 
-const Header = ({ isMenuOpen, setIsMenuOpen }) => (
-  <div className="relative z-10">
+const Header = ({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolean, setIsMenuOpen: (isOpen: boolean) => void }) => (
+  <motion.div 
+    className="relative z-10"
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: 0.2 }}
+  >
     <header className="container mx-auto px-4 py-6 flex justify-between items-center">
       <div className="flex items-center space-x-4">
         <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center">
@@ -168,23 +107,36 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => (
       </div>
     </header>
 
-    {isMenuOpen && (
-      <div className="md:hidden bg-gray-900 py-2">
-        <nav className="container mx-auto px-4">
-          <ul className="space-y-2">
-            <li><Link href="/" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
-            <li><Link href="/dashboard" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
-            <li><Link href="/docs" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
-            <li><Link href="/pricing" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
-          </ul>
-        </nav>
-      </div>
-    )}
-  </div>
+    <AnimatePresence>
+      {isMenuOpen && (
+        <motion.div
+          className="md:hidden bg-gray-900 py-2"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <nav className="container mx-auto px-4">
+            <ul className="space-y-2">
+              <li><Link href="/" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
+              <li><Link href="/dashboard" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
+              <li><Link href="/docs" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
+              <li><Link href="/pricing" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
+            </ul>
+          </nav>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </motion.div>
 );
 
-const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearchQuery }) => (
-  <div className="w-64 bg-gradient-to-b from-gray-950 to-gray-900 text-white p-6 min-h-screen">
+const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearchQuery }: { selectedCategory: string, setSelectedCategory: (category: string) => void, searchQuery: string, setSearchQuery: (query: string) => void }) => (
+  <motion.div 
+    className="w-64 bg-gradient-to-b from-gray-950 to-gray-900 text-white p-6 min-h-screen"
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.5, delay: 0.4 }}
+  >
     <h2 className="text-xl font-bold mb-6 text-blue-300">Categories</h2>
     <input
       type="text"
@@ -283,22 +235,38 @@ const Sidebar = ({ selectedCategory, setSelectedCategory, searchQuery, setSearch
         </button>
       </li>
     </ul>
-  </div>
+  </motion.div>
 );
 
-const CommandList = ({ commands }) => (
-  <div className="space-y-4">
-    {commands.map((command) => (
-      <div key={command.name} className="p-4 bg-gray-800 border border-blue-500 rounded-lg">
+const CommandList = ({ commands }: { commands: Array<{ name: string, description: string }> }) => (
+  <motion.div 
+    className="space-y-4"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: 0.6 }}
+  >
+    {commands.map((command, index) => (
+      <motion.div 
+        key={command.name} 
+        className="p-4 bg-gray-800 border border-blue-500 rounded-lg"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 * index }}
+      >
         <h3 className="text-lg font-bold text-blue-300">{command.name}</h3>
         <p className="text-blue-100">{command.description}</p>
-      </div>
+      </motion.div>
     ))}
-  </div>
+  </motion.div>
 );
 
-const Introduction = ({ goToCommands }) => (
-  <div className="p-4 relative h-full">
+const Introduction = ({ goToCommands }: { goToCommands: () => void }) => (
+  <motion.div 
+    className="p-4 relative h-full"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: 0.6 }}
+  >
     <h2 className="text-3xl font-bold mb-4 text-blue-300">Welcome to Division Documentation!</h2>
     <p className="mb-4 text-blue-100">
       Division is an advanced Discord bot offering a variety of features and commands across different categories, 
@@ -309,7 +277,7 @@ const Introduction = ({ goToCommands }) => (
     <ul className="list-disc pl-6 space-y-2 text-blue-100">
       <li><strong className="text-blue-200">Getting Started</strong>: Step-by-step guide on setting up Division for your server.</li>
       <li><strong className="text-blue-200">Features</strong>: Explore Division's various features and how they can be customized for your community.</li>
-      <li><strong className="text-blue-200">FAQs</strong>: Frequently aske d questions to help troubleshoot common issues.</li>
+      <li><strong className="text-blue-200">FAQs</strong>: Frequently asked questions to help troubleshoot common issues.</li>
       <li><strong className="text-blue-200">Premium</strong>: Learn about Division Premium and its additional capabilities.</li>
       <li><strong className="text-blue-200">Commands Overview</strong>: A detailed list of all commands categorized by functionality.</li>
       <li><strong className="text-blue-200">Moderation Tools</strong>: Understand how to use Division's powerful moderation features like ban, kick, and mute.</li>
@@ -320,43 +288,25 @@ const Introduction = ({ goToCommands }) => (
     <p className="mb-4 text-blue-100">
       Join our community of users for support, feedback, and sharing ideas. Stay updated with our latest features and improvements by following our social media channels.
     </p>
-    <button 
+    <motion.button 
       onClick={goToCommands} 
       className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
     >
       Go to Commands
-    </button>
-  </div>
+    </motion.button>
+  </motion.div>
 );
 
-const App = () => {
+const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('Introduction');
   const [searchQuery, setSearchQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [loadingProgress, setLoadingProgress] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLoadingProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + Math.random() * 7;
-      });
-    }, 80);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const goToCommands = () => setSelectedCategory('Fun');
 
   const filteredCommands = filterCommands(searchQuery, selectedCategory);
-
-  if (loading) {
-    return <LoadingPage progress={loadingProgress} onComplete={() => setLoading(false)} />;
-  }
 
   return (
     <div className="flex min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white overflow-hidden relative">
@@ -371,13 +321,18 @@ const App = () => {
       />
       <div className="flex-1 bg-gray-950 text-white">
         <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-        <main className="container mx-auto p-6">
+        <motion.main 
+          className="container mx-auto p-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+        >
           {selectedCategory === 'Introduction' ? (
             <Introduction goToCommands={goToCommands} />
           ) : (
             <CommandList commands={filteredCommands} />
           )}
-        </main>
+        </motion.main>
       </div>
     </div>
   );
