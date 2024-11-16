@@ -1,7 +1,8 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { Skeleton } from "@/components/ui/skeleton"
 import dynamic from 'next/dynamic'
 
@@ -15,17 +16,28 @@ const DashboardComponent = dynamic(() => import('./dashboard-component'), {
 })
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect('/api/auth/signin')
-    },
-  })
+  const { data: session, status } = useSession()
+  const router = useRouter()
 
-  if (status === "loading") {
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/api/auth/signin')
+    }
+  }, [status, router])
+
+  if (status === 'loading') {
     return (
       <div className="p-8">
         <Skeleton className="h-[400px] w-full" />
+      </div>
+    )
+  }
+
+  if (!session) {
+    return (
+      <div className="p-8">
+        <Skeleton className="h-[400px] w-full" />
+        <p>Session not found. Redirecting...</p>
       </div>
     )
   }
