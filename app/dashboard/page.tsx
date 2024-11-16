@@ -264,7 +264,8 @@ const LoginPage = ({ onLogin }: { onLogin: () => void }) => {
 };
 
 const Dashboard = () => {
-  const { data: session, status } = useSession();
+  const sessionData = useSession();
+  const { data: session, status } = sessionData || {};
   const [activeSection, setActiveSection] = useState('overview');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
