@@ -3,7 +3,16 @@
 import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import { Skeleton } from "@/components/ui/skeleton"
-import Dashboard from './dashboard-component'
+import dynamic from 'next/dynamic'
+
+const DashboardComponent = dynamic(() => import('./dashboard-component'), {
+  ssr: false,
+  loading: () => (
+    <div className="p-8">
+      <Skeleton className="h-[400px] w-full" />
+    </div>
+  ),
+})
 
 export default function DashboardPage() {
   const { data: session, status } = useSession({
@@ -21,5 +30,5 @@ export default function DashboardPage() {
     )
   }
 
-  return <Dashboard session={session} />
+  return <DashboardComponent session={session} />
 }
