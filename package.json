@@ -11,7 +11,7 @@
       "presetup": "mkdir -p components/ui", 
       "initcomponents": "if [ ! -f components.json ]; then npx shadcn init -- --yes; fi", 
       "createfiles": "touch components/ui/card.tsx components/ui/input.tsx components/ui/select.tsx components/ui/button.tsx components/ui/badge.tsx", 
-      "setup": "npx shadcn add card -- --yes && npx shadcn add input -- --yes && npx shadcn add select -- --yes && npx shadcn add button -- --yes && npx shadcn add badge -- --yes && npx shadcn add skeleton -- --yes"
+      "setup": "npx shadcn add card -- --yes && npx shadcn add input -- --yes && npx shadcn add select -- --yes && npx shadcn add button -- --yes && npx shadcn add badge -- --yes"
     },
     "dependencies": {
         "@auth/core": "^0.34.2",
