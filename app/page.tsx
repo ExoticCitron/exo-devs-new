@@ -154,36 +154,22 @@ const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }: { i
 );
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [scrollY, setScrollY] = useState(0);
-  const { scrollY: scrollYProgress } = useScroll();
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setScrollY(latest);
-  });
-
-  const headerOpacity = useTransform(scrollYProgress, [0, 200], [1, 0.8]);
-  const headerBlur = useTransform(scrollYProgress, [0, 200], [0, 8]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <motion.header 
       className="container mx-auto px-4 py-6 relative"
-      style={{ 
-        opacity: headerOpacity,
-        filter: `blur(${headerBlur}px)`,
-      }}
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
     >
       <div className="flex justify-center">
         <motion.div
-          className="bg-gray-900 bg-opacity-70 backdrop-blur-md rounded-full px-8 py-4 shadow-lg relative"
-          initial={{ y: -100, opacity: 0 }}
+          className="bg-gray-900 bg-opacity-80 rounded-full px-8 py-4 border border-blue-500 shadow-lg"
+          initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 100, damping: 15 }}
-          style={{
-            boxShadow: '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(0, 255, 255, 0.2)',
-          }}
+          transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.4 }}
         >
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-4">
@@ -200,31 +186,10 @@ const Header = () => {
             </div>
             <nav className="hidden md:block">
               <ul className="flex space-x-6">
-                {['Home', 'Dashboard', 'Docs', 'Pricing'].map((item) => (
-                  <li key={item}>
-                    <Link href={item === 'Home' ? '/' : `/${item.toLowerCase()}`} passHref legacyBehavior>
-                      <motion.a
-                        className="text-blue-200 hover:text-white transition-colors relative"
-                        onHoverStart={() => setHoveredItem(item)}
-                        onHoverEnd={() => setHoveredItem(null)}
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        {item}
-                        <AnimatePresence>
-                          {hoveredItem === item && (
-                            <motion.div
-                              className="absolute inset-0 bg-cyan-400 opacity-20 rounded-full"
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              exit={{ scale: 0 }}
-                              transition={{ duration: 0.2 }}
-                            />
-                          )}
-                        </AnimatePresence>
-                      </motion.a>
-                    </Link>
-                  </li>
-                ))}
+                <li><Link href="/" className="text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
+                <li><Link href="/dashboard" className="text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
+                <li><Link href="/docs" className="text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
+                <li><Link href="/pricing" className="text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
               </ul>
             </nav>
             <div className="md:hidden">
@@ -235,23 +200,26 @@ const Header = () => {
           </div>
         </motion.div>
       </div>
-      {isMenuOpen && (
-        <motion.div
-          className="md:hidden bg-gray-900 py-2 mt-4 rounded-lg border border-blue-500"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-        >
-          <nav className="container mx-auto px-4">
-            <ul className="space-y-2">
-              <li><Link href="/" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
-              <li><Link href="/dashboard" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
-              <li><Link href="/docs" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
-              <li><Link href="/pricing" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
-            </ul>
-          </nav>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="md:hidden bg-gray-900 py-2 mt-4 rounded-lg border border-blue-500"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <nav className="container mx-auto px-4">
+              <ul className="space-y-2">
+                <li><Link href="/" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Home</Link></li>
+                <li><Link href="/dashboard" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Dashboard</Link></li>
+                <li><Link href="/docs" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Docs</Link></li>
+                <li><Link href="/pricing" className="block py-2 text-blue-200 hover:text-blue-100 transition-colors">Pricing</Link></li>
+              </ul>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 };
