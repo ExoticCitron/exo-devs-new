@@ -33,14 +33,5 @@ export default function DashboardPage() {
     )
   }
 
-  if (!session) {
-    return (
-      <div className="p-8">
-        <Skeleton className="h-[400px] w-full" />
-        <p>Session not found. Redirecting...</p>
-      </div>
-    )
-  }
-
-  return <DashboardComponent session={session} />
+  return session ? <DashboardComponent session={session} /> : <div>Redirecting...</div>
 }
