@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Shield, Zap, BarChart, Users, Headphones, Code, Twitter, Github, MessageCircle, Settings, ChevronDown } from 'lucide-react';
+import { Check, Shield, Zap, BarChart, Users, Headphones, Code, Twitter, Github, MessageCircle, Settings, ChevronDown, Crown, Mail } from 'lucide-react';
 
-const BackgroundBubble = ({ size, position, color }: { size: number, position: { x: string, y: string }, color: string }) => (
+const BackgroundBubble = ({ size, position, color }) => (
   <motion.div
     className={`absolute rounded-full ${color} opacity-10 blur-xl`}
     style={{
@@ -54,7 +54,7 @@ const SparkleEffect = () => (
   </div>
 );
 
-const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }: { icon: React.ElementType, title: string, description: string, isHovered: boolean, onHover: (isHovered: boolean) => void }) => (
+const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }) => (
   <motion.div 
     className="bg-gray-800 bg-opacity-50 p-6 rounded-lg cursor-pointer relative overflow-hidden"
     onHoverStart={() => onHover(true)}
@@ -81,6 +81,38 @@ const FeatureCard = ({ icon: Icon, title, description, isHovered, onHover }: { i
     <AnimatePresence>
       {isHovered && <SparkleEffect />}
     </AnimatePresence>
+  </motion.div>
+);
+
+const PricingCard = ({ title, price, features, buttonText, icon: Icon, isPreferred }) => (
+  <motion.div 
+    className={`bg-gray-800 bg-opacity-40 p-6 rounded-lg cursor-pointer relative overflow-hidden border ${isPreferred ? 'border-gray-600' : 'border-transparent'} flex flex-col h-full`}
+    whileHover={{ scale: 1.05 }}
+  >
+    <div className="flex items-center justify-between">
+      <h3 className="text-xl font-bold mb-2 text-blue-100 flex items-center">
+        {title} <Icon className="w-6 h-6 ml-2 text-yellow-400" />
+      </h3>
+      {isPreferred && (
+        <span className="focus:ring-ring inline-flex select-none items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 border-transparent">
+          PREFERRED
+        </span>
+      )}
+    </div>
+    <p className="text-3xl font-bold mb-4 text-blue-300">{price}</p>
+    <ul className="space-y-2 mb-4">
+      {features.map((feature, index) => (
+        <li key={index} className="flex items-center text-blue-200">
+          <Check className="w-5 h-5 mr-2 text-green-500" />
+          {feature}
+        </li>
+      ))}
+    </ul>
+    <div className="mt-auto">
+      <button className="bg-blue-600 text-white px-4 py-2 rounded w-full font-bold flex items-center justify-center">
+        {buttonText} <Mail className="w-5 h-5 ml-2" />
+      </button>
+    </div>
   </motion.div>
 );
 
@@ -155,14 +187,15 @@ const Header = () => {
   );
 };
 
-const PremiumPage: React.FC = () => {
+const PremiumPage = () => {
   const [email, setEmail] = useState('');
-  const [activeFeature, setActiveFeature] = useState<number | null>(null);
+  const [activeFeature, setActiveFeature] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [showPricingInfo, setShowPricingInfo] = useState(false);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
     window.addEventListener('mousemove', handleMouseMove);
@@ -205,7 +238,34 @@ const PremiumPage: React.FC = () => {
     },
   ];
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const pricingPlans = [
+    {
+      title: "Free Tier",
+      price: "$0.00",
+      features: ["Basic features (they're all basic)", "No hidden fees (i dont have the time to add them)", "No premium support (you're on your own cuh)"],
+      buttonText: "Start now",
+      icon: Zap,
+      isPreferred: false
+    },
+    {
+      title: "Pro Tier",
+      price: "$0.00",
+      features: ["All Free features (still basic)", "Premium support (we might answer) (we wont)", "erm what the sigma"],
+      buttonText: "Go Pro",
+      icon: Crown,
+      isPreferred: true
+    },
+    {
+      title: "Enterprise",
+      price: "$0.00",
+      features: ["All Pro features", "24/7 support (that wont fucking happen)", "Custom solutions (this wont happen either)"],
+      buttonText: "Contact Us",
+      icon: Mail,
+      isPreferred: false
+    }
+  ];
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch('/api/save-email', {
@@ -311,54 +371,55 @@ const PremiumPage: React.FC = () => {
           </motion.section>
 
           <motion.section 
-            className="mb-20"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-          >
-            <h2 className="text-3xl font-bold text-center mb-12 text-blue-300">Why Choose Premium?</h2>
-            <div className="bg-gray-800 bg-opacity-50 p-8 rounded-lg">
-              <ul className="space-y-4">
-                {[
-                  "Unlimited audio channels for 24/7 music playback",
-                  "Custom bot branding to match your server's theme",
-                  "Advanced auto-moderation with customizable rules",
-                  "Exclusive premium-only commands and features",
-                  "Early access to new features and updates",
-                  "Increased rate limits for high-traffic servers",
-                  "Premium support with guaranteed response times",
-                  "Regular feature updates based on community feedback"
-                ].map((benefit, index) => (
-                  <motion.li 
-                    key={index} 
-                    className="flex items-start"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 * index }}
-                  >
-                    <Check className="w-6 h-6 mr-2 text-blue-400 flex-shrink-0" />
-                    <span className="text-blue-100">{benefit}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-          </motion.section>
-
-          <motion.section 
             className="text-center mb-20"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1 }}
           >
             <h2 className="text-3xl font-bold mb-6 text-blue-300">Ready to Upgrade?</h2>
-            <p className="text-xl mb-8 text-blue-100">Join thousands of servers already enjoying Division Premium</p>
-            <motion.button 
-              className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg"
-              whileHover={{ backgroundColor: '#7289DA', scale: 1.05 }}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {pricingPlans.map((plan, index) => (
+                <PricingCard key={index} {...plan} />
+              ))}
+            </div>
+            <p className="text-lg mt-8 text-blue-100">Still not convinced? I don't fucking care</p>
+            <motion.button
+              className="underline text-blue-200 hover:text-blue-100 transition-colors mt-4 inline-block"
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => setShowPricingInfo(true)}
             >
-              Upgrade to Premium
+              Learn more about our pricing
             </motion.button>
+            <AnimatePresence>
+              {showPricingInfo && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                  onClick={() => setShowPricingInfo(false)}
+                >
+                  <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.9, opacity: 0 }}
+                    transition={{ type: "spring", damping: 15 }}
+                    className="bg-gray-800 p-8 rounded-lg max-w-md m-4"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <h3 className="text-2xl font-bold mb-4 text-blue-300">Pricing Information</h3>
+                    <p className="text-blue-100 mb-4">Nothing to learn about... go back</p>
+                    <button
+                      className="bg-blue-600 text-white px-4 py-2 rounded font-bold w-full"
+                      onClick={() => setShowPricingInfo(false)}
+                    >
+                      Close
+                    </button>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.section>
 
           <motion.section 
